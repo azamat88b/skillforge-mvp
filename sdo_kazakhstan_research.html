@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ресерч рынка СДО — Казахстан 2025–2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #161921;
+    --surface2: #1e222d;
+    --border: #2a2f3d;
+    --accent: #00e5a0;
+    --accent2: #3b82f6;
+    --accent3: #f59e0b;
+    --danger: #ef4444;
+    --text: #e8eaf0;
+    --muted: #8b91a8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Golos Text', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 60px 32px 100px;
+  }
+  .header { margin-bottom: 64px; border-bottom: 1px solid var(--border); padding-bottom: 48px; }
+  .header-label {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .header-label::before { content: ''; display: block; width: 32px; height: 1px; background: var(--accent); }
+  h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+  }
+  h1 span { color: var(--accent); }
+  .header-meta { display: flex; gap: 24px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
+
+  .section { margin-bottom: 56px; }
+  .section-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  h2 { font-family: 'Unbounded', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 20px; line-height: 1.3; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 48px; }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--accent); }
+  .stat-card.blue::before { background: var(--accent2); }
+  .stat-card.amber::before { background: var(--accent3); }
+  .stat-card.red::before { background: var(--danger); }
+  .stat-value { font-family: 'Unbounded', sans-serif; font-size: 32px; font-weight: 900; line-height: 1; margin-bottom: 8px; color: var(--accent); }
+  .stat-card.blue .stat-value { color: var(--accent2); }
+  .stat-card.amber .stat-value { color: var(--accent3); }
+  .stat-card.red .stat-value { color: var(--danger); }
+  .stat-label { font-size: 13px; color: var(--muted); line-height: 1.4; }
+
+  .insight {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+  .insight.blue { border-left-color: var(--accent2); }
+  .insight.amber { border-left-color: var(--accent3); }
+  .insight.red { border-left-color: var(--danger); }
+  .insight strong { color: var(--accent); font-weight: 600; }
+  .insight.blue strong { color: var(--accent2); }
+  .insight.amber strong { color: var(--accent3); }
+  .insight.red strong { color: var(--danger); }
+
+  /* TARGET CARD — Samruk */
+  .target-card {
+    background: linear-gradient(135deg, rgba(0,229,160,0.07), rgba(59,130,246,0.05));
+    border: 1px solid rgba(0,229,160,0.35);
+    border-radius: 16px;
+    padding: 36px 40px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .target-card::before {
+    content: 'ТОЧКА ВХОДА';
+    position: absolute;
+    top: 20px; right: 24px;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    opacity: 0.6;
+  }
+  .target-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .target-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+  .target-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .tstat { background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+  .tstat-val { font-family: 'Unbounded', sans-serif; font-size: 20px; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 4px; }
+  .tstat-lbl { font-size: 11.5px; color: var(--muted); line-height: 1.4; }
+  .target-desc { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
+  .target-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .player-grid { display: grid; gap: 20px; }
+  .player-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .player-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .player-card.secondary:hover { border-color: var(--accent2); }
+  .player-card.amber:hover { border-color: var(--accent3); }
+  .player-name { font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .player-origin { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .badge-green { background: rgba(0,229,160,0.12); color: var(--accent); }
+  .badge-blue { background: rgba(59,130,246,0.12); color: var(--accent2); }
+  .badge-amber { background: rgba(245,158,11,0.12); color: var(--accent3); }
+  .badge-red { background: rgba(239,68,68,0.12); color: var(--danger); }
+  .badge-gray { background: rgba(139,145,168,0.12); color: var(--muted); }
+  .player-desc { font-size: 13.5px; color: var(--muted); line-height: 1.65; margin-bottom: 16px; }
+  .player-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 11.5px; color: var(--muted); }
+  .player-revenue { text-align: right; min-width: 140px; }
+  .revenue-value { font-family: 'Unbounded', sans-serif; font-size: 18px; font-weight: 700; color: var(--accent); margin-bottom: 2px; }
+  .player-card.secondary .revenue-value { color: var(--accent2); }
+  .player-card.amber .revenue-value { color: var(--accent3); }
+  .revenue-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .compare-table th {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .compare-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .compare-table td:first-child { font-weight: 600; white-space: nowrap; }
+  .yes { color: var(--accent); font-weight: 600; }
+  .no { color: var(--danger); font-weight: 600; }
+  .partial { color: var(--accent3); font-weight: 600; }
+
+  /* PITCH BLOCK */
+  .pitch-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px 36px;
+    margin-bottom: 20px;
+  }
+  .pitch-num {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .pitch-title { font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .pitch-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+  .pitch-desc strong { color: var(--text); }
+
+  .opp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+  .opp-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+  .opp-num { font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 900; color: var(--border); line-height: 1; margin-bottom: 12px; }
+  .opp-title { font-family: 'Unbounded', sans-serif; font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+  .opp-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  .risk-list { display: grid; gap: 12px; }
+  .risk-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; display: flex; gap: 16px; align-items: flex-start; }
+  .risk-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+  .risk-title { font-weight: 600; margin-bottom: 4px; font-size: 14px; }
+  .risk-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+  .conclusion {
+    background: linear-gradient(135deg, rgba(0,229,160,0.06), rgba(59,130,246,0.04));
+    border: 1px solid rgba(0,229,160,0.2);
+    border-radius: 16px;
+    padding: 40px 36px;
+    margin-top: 48px;
+  }
+  .conclusion h2 { color: var(--accent); margin-bottom: 16px; }
+  .conclusion p { color: var(--muted); font-size: 14px; line-height: 1.75; margin-bottom: 12px; }
+  .conclusion p:last-child { margin-bottom: 0; }
+  .conclusion strong { color: var(--text); }
+
+  @media (max-width: 700px) {
+    .wrapper { padding: 40px 20px 80px; }
+    .player-card { grid-template-columns: 1fr; }
+    .player-revenue { text-align: left; }
+    .compare-table { font-size: 12px; }
+    .compare-table th, .compare-table td { padding: 10px 10px; }
+    .target-card { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="header">
+    <div class="header-label">Маркет-ресерч · RNM KZ</div>
+    <h1>Рынок <span>СДО/LMS</span><br>Казахстан 2025–2026</h1>
+    <div class="header-meta">
+      <span>📅 Май 2026</span>
+      <span>🎯 B2B / Корпоративный сегмент</span>
+      <span>🏁 Точка входа: Samruk Business Academy</span>
+    </div>
+  </div>
+
+  <!-- КЛЮЧЕВЫЕ ЦИФРЫ -->
+  <div class="section">
+    <div class="section-title">Ключевые цифры рынка</div>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-value">95,4 млрд ₸</div>
+        <div class="stat-label">Объём edtech-рынка Казахстана в 2024 году (90 крупнейших компаний)</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-value">+20%</div>
+        <div class="stat-label">Рост рынка онлайн-образования в Казахстане в 2024 году (г/г)</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-value">4+ млн</div>
+        <div class="stat-label">Казахстанцев ежегодно проходят онлайн-курсы (оценка МЦРИАП)</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-value">Вакуум</div>
+        <div class="stat-label">Нет сильного локального SaaS-LMS для корпоратов — рынок открыт</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ТОЧКА ВХОДА — SAMRUK -->
+  <div class="section">
+    <div class="section-title">Целевой клиент — точка входа</div>
+
+    <div class="target-card">
+      <div class="target-title">Samruk Business Academy</div>
+      <div class="target-subtitle">sba.kz · Корпоративный университет Фонда «Самрук-Казына» · Астана, ул. Конаева 10, этаж 34</div>
+
+      <div class="target-stats">
+        <div class="tstat">
+          <div class="tstat-val">20+</div>
+          <div class="tstat-lbl">лет на рынке Казахстана</div>
+        </div>
+        <div class="tstat">
+          <div class="tstat-val">27К+</div>
+          <div class="tstat-lbl">сотрудников прошли обучение в 2024 году</div>
+        </div>
+        <div class="tstat">
+          <div class="tstat-val">250К+</div>
+          <div class="tstat-lbl">специалистов подготовлено за всё время</div>
+        </div>
+        <div class="tstat">
+          <div class="tstat-val">540+</div>
+          <div class="tstat-lbl">компаний в экосистеме Самрук-Казына</div>
+        </div>
+      </div>
+
+      <div class="target-desc">
+        <strong style="color:var(--text)">Что это:</strong> корпоративный университет Фонда «Самрук-Казына» — крупнейшего государственного холдинга Казахстана (КазМунайГаз, Казахтелеком, QazCloud, КазТрансГаз и сотни других). SBA — не просто учебный центр для своих: это открытый HR-провайдер для всего рынка (корпоративное обучение, рекрутинг, аутстаффинг, HR-консалтинг). В 2024 году фокус сместился на цифровые технологии в обучении и промышленную безопасность.
+      </div>
+
+      <div class="target-desc">
+        <strong style="color:var(--accent)">Почему это точка входа:</strong> SBA обслуживает сотни компаний с тысячами сотрудников, но не имеет собственной зрелой LMS-платформы под свои масштабы. Они используют офлайн-тренинги + внешние инструменты. Задача по цифровизации обучения — прямо в их стратегии на 2025 год. Это якорный клиент, который открывает доступ ко всей экосистеме Самрук.
+      </div>
+
+      <div class="target-tags">
+        <span class="badge badge-green">Госхолдинг — стабильный бюджет</span>
+        <span class="badge badge-green">27К+ пользователей сразу</span>
+        <span class="badge badge-blue">Цифровизация обучения в планах</span>
+        <span class="badge badge-amber">Открыты к внешним партнёрам</span>
+        <span class="badge badge-amber">HR-площадка для всего рынка</span>
+      </div>
+    </div>
+
+    <!-- Что им нужно -->
+    <div class="pitch-block">
+      <div class="pitch-num">Боли и задачи SBA → Возможности для RNM KZ</div>
+      <div class="pitch-title">Что им реально нужно прямо сейчас</div>
+      <div class="pitch-desc">
+        По данным годового отчёта Самрук-Казына 2024, SBA активно двигается в сторону <strong>цифровых технологий в обучении</strong>. Направления обучения в 2024: лидерство, антикоррупция, комплаенс, промышленная безопасность, цифровые коммуникации, финансы и право, закупки — всё это <strong>идеальный контент для LMS-автоматизации</strong>. Обучение по промышленной безопасности охватило ~16 000 работников. При таком масштабе офлайн-формат критически дорогой.
+        <br><br>
+        <strong>Конкретные точки боли:</strong> масштабирование тренингов на 540+ портфельных компаний; отсутствие единой цифровой платформы для всей экосистемы Самрук; нет инструмента отслеживания прогресса и аналитики по всем дочерним организациям; обязательное обучение (охрана труда, комплаенс) требует фиксации и отчётности; площадка HR connect нуждается в цифровом инструменте для обмена знаниями.
+      </div>
+    </div>
+  </div>
+
+  <!-- ИГРОКИ — БЕЗ DARLEAN -->
+  <div class="section">
+    <div class="section-title">Конкурентная карта — кто уже есть на рынке</div>
+
+    <div class="player-grid">
+      <div class="player-card secondary">
+        <div>
+          <div class="player-name">Эквио (e-queo.com)</div>
+          <div class="player-origin">🇷🇺 Россия · Представительство в Казахстане с 2024</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+            <span class="badge badge-blue">Заходит в KZ активно</span>
+            <span class="badge badge-green">Топ-5 СНГ</span>
+          </div>
+          <div class="player-desc">HR-платформа: LMS + HCM + ИПР/LXP + HR-аналитика. Открытый API, интеграции с 1С/Bitrix24/ZOOM, SCORM 1.2 и 2004. Мин. контракт ~100 тыс. руб./год (до 50 чел.). Среди клиентов — компании в 14 городах России и Казахстана. Ориентирована на ритейл, HoReCa, финансы, франшизы. Выручка +26% в 2024.</div>
+          <div class="player-tags">
+            <span class="tag">LMS + HCM</span>
+            <span class="tag">SCORM</span>
+            <span class="tag">iOS/Android/Web</span>
+            <span class="tag">Геймификация</span>
+            <span class="tag">OnPremise доступен</span>
+          </div>
+        </div>
+        <div class="player-revenue">
+          <div class="revenue-value" style="font-size:14px;color:var(--accent2)">~560 млн ₽</div>
+          <div class="revenue-label">Выручка 2024</div>
+        </div>
+      </div>
+
+      <div class="player-card secondary">
+        <div>
+          <div class="player-name">Talent Rocks (talentrocks.ru)</div>
+          <div class="player-origin">🇷🇺 Россия · SaaS, RU/EN, реестр РФ ПО</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+            <span class="badge badge-blue">Интерес для ресерча</span>
+            <span class="badge badge-amber">Лучшее мобильное приложение 2025</span>
+          </div>
+          <div class="player-desc">Mobile-first платформа: адаптация, обучение, модульные программы, стажёрские программы, обучение руководителей и партнёров, корпоративные конкурсы. Победитель Внутриком-2025 и bema!2026. Фокус на сильный мобильный UX и вовлечённость. Клиенты из финансов, клиник, промышленности.</div>
+          <div class="player-tags">
+            <span class="tag">Mobile-first</span>
+            <span class="tag">Адаптация / онбординг</span>
+            <span class="tag">Конкурсы</span>
+            <span class="tag">152-ФЗ</span>
+          </div>
+        </div>
+        <div class="player-revenue">
+          <div class="revenue-value" style="font-size:12px;color:var(--accent2)">не раскрыто</div>
+          <div class="revenue-label">Выручка</div>
+        </div>
+      </div>
+
+      <div class="player-card amber">
+        <div>
+          <div class="player-name">iSpring Learn + Suite</div>
+          <div class="player-origin">🇷🇺 Россия · Официальный партнёр в КЗ — AsiaCRM</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+            <span class="badge badge-amber">Доминант СНГ</span>
+            <span class="badge badge-green">Клиенты в KZ есть</span>
+          </div>
+          <div class="player-desc">Крупнейший игрок: 61 000 компаний, 172 страны. Казахстанские клиенты: Kaspi.kz, Freedom Mobile, Bereke Bank, Kazakhmys, Forte Bank, Kazakh Tourism. LMS + конструктор курсов iSpring Suite. Выручка +22% в 2024, более 3,5 млрд руб. Потенциальный конкурент при заходе в SBA.</div>
+          <div class="player-tags">
+            <span class="tag">LMS + конструктор</span>
+            <span class="tag">SCORM/xAPI</span>
+            <span class="tag">Адаптация</span>
+            <span class="tag">Крупный бизнес</span>
+          </div>
+        </div>
+        <div class="player-revenue">
+          <div class="revenue-value" style="font-size:14px">3,5+ млрд ₽</div>
+          <div class="revenue-label">Выручка 2024</div>
+        </div>
+      </div>
+
+      <div class="player-card">
+        <div>
+          <div class="player-name">МояКоманда (myteamhr.kz)</div>
+          <div class="player-origin">🇰🇿 Домен .kz · Позиционирует себя под KZ-рынок</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+            <span class="badge badge-green">Локальный домен</span>
+            <span class="badge badge-gray">400+ клиентов</span>
+          </div>
+          <div class="player-desc">HR-платформа: LMS + геймификация + OKR/KPI + оценка 360 + рекрутинг. 400+ клиентов, 250 000+ пользователей. Облачный запуск за 1 день без IT. Позиционирует себя как решение для казахстанского рынка, хотя базируется в России.</div>
+          <div class="player-tags">
+            <span class="tag">HR-экосистема</span>
+            <span class="tag">OKR/KPI</span>
+            <span class="tag">Геймификация</span>
+            <span class="tag">SaaS быстрый запуск</span>
+          </div>
+        </div>
+        <div class="player-revenue">
+          <div class="revenue-value" style="font-size:12px">250К users</div>
+          <div class="revenue-label">Пользователей</div>
+        </div>
+      </div>
+
+      <div class="player-card">
+        <div>
+          <div class="player-name">LMS.KZ / Crocos (Moodle-интеграторы)</div>
+          <div class="player-origin">🇰🇿 Казахстан · Астана / Алматы</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+            <span class="badge badge-gray">Интегратор, не SaaS</span>
+            <span class="badge badge-gray">ВУЗы / Учебные центры</span>
+          </div>
+          <div class="player-desc">Локальные казахстанские интеграторы: внедряют Moodle «под ключ». LMS.KZ работает с 2016 года. Не конкурируют напрямую с SaaS-платформами — целевая аудитория ВУЗы и небольшие учебные центры. Бюджет клиентов значительно ниже корпоративного сегмента.</div>
+          <div class="player-tags">
+            <span class="tag">Moodle</span>
+            <span class="tag">Под ключ</span>
+            <span class="tag">ВУЗы / Edu</span>
+          </div>
+        </div>
+        <div class="player-revenue">
+          <div class="revenue-value" style="font-size:12px;color:var(--muted)">Услуги</div>
+          <div class="revenue-label">Бизнес-модель</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- СРАВНЕНИЕ ЭКВИО vs TALENT ROCKS -->
+  <div class="section">
+    <div class="section-title">Эквио vs Talent Rocks — детальное сравнение</div>
+    <div style="overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Критерий</th>
+            <th>Эквио (e-queo.com)</th>
+            <th>Talent Rocks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Позиционирование</td><td>HR-платформа: LMS + HCM + ИПР</td><td>Мобильная платформа HR-процессов</td></tr>
+          <tr><td>Целевой клиент</td><td>SMB и Enterprise, ритейл, HoReCa, финансы</td><td>Средний и крупный бизнес, финансы, медицина, промышленность</td></tr>
+          <tr><td>Мобильное приложение</td><td class="yes">✓ iOS + Android + Web</td><td class="yes">✓ Победитель Внутриком-2025</td></tr>
+          <tr><td>Конструктор курсов</td><td class="yes">✓ Встроенный (интерактивные курсы)</td><td class="partial">~ Базовый</td></tr>
+          <tr><td>SCORM поддержка</td><td class="yes">✓ SCORM 1.2 и 2004</td><td class="partial">~ Не указано явно</td></tr>
+          <tr><td>Геймификация</td><td class="yes">✓ Бейджи, магазин, рейтинги</td><td class="yes">✓ Конкурсы, рейтинги</td></tr>
+          <tr><td>HR-аналитика</td><td class="yes">✓ Отдельный модуль</td><td class="partial">~ Базовая аналитика</td></tr>
+          <tr><td>Адаптация / онбординг</td><td class="yes">✓ Да</td><td class="yes">✓ Сильный акцент</td></tr>
+          <tr><td>Интеграции</td><td class="yes">✓ Открытый API, 1С, Bitrix24, ZOOM</td><td class="partial">~ По запросу</td></tr>
+          <tr><td>OnPremise / Private Cloud</td><td class="yes">✓ Есть</td><td class="no">✗ Не заявлено</td></tr>
+          <tr><td>Мин. стоимость/год</td><td>~100 000 руб. / ~500 000 ₸ (до 50 чел.)</td><td>По запросу (демо)</td></tr>
+          <tr><td>Присутствие в Казахстане</td><td class="yes">✓ Представительство с 2024</td><td class="partial">~ Только онлайн</td></tr>
+          <tr><td>Уникальная фишка</td><td>Модуль «Задания» + ИПР/LXP</td><td>Лучший mobile UX + корп. конкурсы</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- СТРАТЕГИЯ ЗАХОДА В SBA -->
+  <div class="section">
+    <div class="section-title">Стратегия захода в Samruk Business Academy</div>
+
+    <div class="pitch-block">
+      <div class="pitch-num">Вариант 01 — Быстрый старт</div>
+      <div class="pitch-title">Ресейл / технологическое партнёрство с Эквио или Talent Rocks</div>
+      <div class="pitch-desc">
+        RNM KZ становится <strong>официальным партнёром платформы</strong> (Эквио уже ищет локальных партнёров в КЗ) и предлагает SBA готовое решение с локальной поддержкой, внедрением и интеграцией. Ключевое преимущество перед прямой продажей от вендора — <strong>казахстанская команда, знание рынка, быстрый онбординг</strong>.
+        <br><br>
+        Доход: реселлерская маржа (20–40% от лицензии) + услуги внедрения + техническая поддержка. При 27К пользователей в SBA — чек от <strong>15–30 млн ₸/год</strong> только на лицензиях.
+      </div>
+    </div>
+
+    <div class="pitch-block">
+      <div class="pitch-num">Вариант 02 — Средний горизонт</div>
+      <div class="pitch-title">Кастомная LMS-разработка под экосистему Самрук</div>
+      <div class="pitch-desc">
+        Разработка <strong>белой LMS под требования SBA</strong>: казахский/русский языки, интеграция с внутренними HR-системами Самрук, аналитика по всем 540+ дочерним компаниям, ЦОД в Казахстане. Это долгосрочный проект (6–12 мес. разработки), но он создаёт <strong>продукт с готовым якорным клиентом</strong> и референсом на весь госсектор Казахстана.
+        <br><br>
+        Это прямое попадание в боль: SBA нужна <strong>единая платформа знаний</strong> для группы компаний Самрук — сейчас её нет. Ориентировочный бюджет проекта: <strong>50–150 млн ₸</strong> + сопровождение.
+      </div>
+    </div>
+
+    <div class="pitch-block">
+      <div class="pitch-num">Вариант 03 — AI-дифференциация</div>
+      <div class="pitch-title">LMS с AI-модулем: автогенерация курсов + ИИ-ассистент</div>
+      <div class="pitch-desc">
+        SBA производит огромный объём обучающего контента вручную (лидерство, комплаенс, охрана труда). <strong>ИИ-инструмент для генерации курсов из документов</strong> (регламенты, инструкции, НПА) — это убийственная точка дифференциации, которой нет ни у Эквио, ни у iSpring в полной мере.
+        <br><br>
+        Пилот: взять <strong>один конкретный модуль</strong> (например, промышленная безопасность) → показать, как за 2 недели создаётся SCORM-курс из существующих документов SBA с помощью AI. Это конкретный ROI для принятия решения о полноценном проекте.
+      </div>
+    </div>
+  </div>
+
+  <!-- РИСКИ -->
+  <div class="section">
+    <div class="section-title">Риски при заходе через SBA</div>
+    <div class="risk-list">
+      <div class="risk-item">
+        <div class="risk-icon">🏛️</div>
+        <div>
+          <div class="risk-title">Тендерные процедуры Самрук-Казына</div>
+          <div class="risk-desc">Любая закупка в группе Самрук идёт через тендер на портале закупок. Нужно изучить реестр поставщиков, требования к квалификации и опыту. Желательно иметь референс-проект до подачи.</div>
+        </div>
+      </div>
+      <div class="risk-item">
+        <div class="risk-icon">🔒</div>
+        <div>
+          <div class="risk-title">Требования к безопасности данных</div>
+          <div class="risk-desc">Государственный холдинг — требования к размещению данных в ЦОД Казахстана и соответствию требованиям закона «О персональных данных» РК. Облако в России не подойдёт.</div>
+        </div>
+      </div>
+      <div class="risk-item">
+        <div class="risk-icon">⏳</div>
+        <div>
+          <div class="risk-title">Длинный цикл согласования</div>
+          <div class="risk-desc">В госструктурах решения принимаются медленно. Цикл от первого контакта до подписания контракта — 6–12 месяцев. Нужен ресурс на pre-sales и «прогрев» правильных людей внутри SBA.</div>
+        </div>
+      </div>
+      <div class="risk-item">
+        <div class="risk-icon">🏔️</div>
+        <div>
+          <div class="risk-title">Конкуренты уже стучатся</div>
+          <div class="risk-desc">iSpring и Эквио активно продают в Казахстане. Не исключено, что они уже ведут переговоры с SBA. Скорость выхода на первый контакт — критична.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conclusion">
+    <div class="section-title" style="margin-bottom:16px">Итоговая оценка</div>
+    <h2>Samruk Business Academy — идеальный якорный клиент</h2>
+    <p>SBA — это <strong>не просто один клиент</strong>. Это вход в экосистему из 540+ компаний Самрук-Казына с тысячами сотрудников и стабильным государственным бюджетом. Успешный кейс с SBA = референс для всего корпоративного рынка Казахстана.</p>
+    <p>На рынке нет <strong>ни одного казахстанского LMS-продукта</strong>, который закрывает потребности такого масштаба. Российские игроки заходят, но у них нет локальной команды, казахского языка и понимания специфики госхолдинга.</p>
+    <p><strong>Рекомендуемый первый шаг:</strong> выйти на контакт с SBA через LinkedIn или напрямую (info@sba.kz, +7 775 390 5555) с конкретным предложением провести бесплатный аудит текущей системы обучения и показать пилот AI-генерации курса. Это создаёт ценность до подписания и формирует доверие.</p>
+  </div>
+
+  <div style="margin-top:40px;color:var(--muted);font-size:12px;text-align:center">
+    Составлено: май 2026 · Источники: Smart Ranking, Statsnet, sk.kz, sba.kz, LinkedIn SBA, edtechs.ru, сайты платформ · RNM KZ
+  </div>
+
+</div>
+</body>
+</html>

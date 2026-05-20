@@ -1,0 +1,2559 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillForge — Демо прототип</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231A6B4A'/%3E%3Cpath d='M16 6.5 L21.5 16.5 L17.5 14.8 L17.5 19 L14.5 19 L14.5 14.8 L10.5 16.5 Z' fill='%23fff'/%3E%3Crect x='9' y='21' width='14' height='2.2' rx='1' fill='%2386EFBF'/%3E%3Crect x='12.5' y='23.2' width='7' height='2.6' rx='0.5' fill='%2386EFBF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Epilogue:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #F7F5F0;
+  --white:     #FFFFFF;
+  --surface:   #EFEDE8;
+  --surface2:  #E8E5DF;
+  --border:    #DDD9D0;
+  --border2:   #C8C3B8;
+  --text:      #1A1814;
+  --muted:     #6B6760;
+  --muted2:    #9A9590;
+  --accent:    #1A6B4A;
+  --accent-lt: #EAF4EE;
+  --accent-md: #C6E8D4;
+  --accent-dk: #145438;
+  --amber:     #B85A00;
+  --amber-lt:  #FEF3E8;
+  --blue:      #2952B8;
+  --blue-lt:   #EAF0FE;
+  --red:       #C0392B;
+  --red-lt:    #FDECEA;
+  --ink:       #1A1814;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Epilogue', sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  min-height: 100vh;
+}
+
+button { font-family: inherit; }
+input, textarea, select { font-family: inherit; }
+a { color: var(--accent); text-decoration: none; }
+
+/* ── DEMO BANNER ── */
+.demo-banner {
+  position: fixed; bottom: 20px; right: 20px; z-index: 200;
+  background: var(--ink); color: #fff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 12px;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  max-width: 320px;
+}
+.demo-banner .dot {
+  width: 8px; height: 8px;
+  background: #86EFBF;
+  border-radius: 50%;
+  animation: blink 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.demo-banner b { color: #86EFBF; font-weight: 600; }
+.demo-banner a { color: #86EFBF; text-decoration: underline; }
+.demo-banner .reset-btn {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  padding: 4px 10px; border-radius: 6px;
+  font-size: 11px; cursor: pointer;
+  margin-left: 6px;
+}
+.demo-banner .reset-btn:hover { background: rgba(255,255,255,0.2); }
+
+/* ── BRAND LOGO ── */
+.brand-logo {
+  display: inline-flex; align-items: center; gap: 10px;
+  text-decoration: none;
+  font-family: 'Playfair Display', serif;
+  font-size: 19px; font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+.brand-logo .mark { width: 28px; height: 28px; display: block; border-radius: 7px; box-shadow: 0 2px 8px rgba(26,107,74,0.25); }
+.brand-logo em { font-style: italic; color: var(--accent); font-weight: 800; }
+.brand-logo.dark { color: #fff; }
+.brand-logo.dark em { color: #86EFBF; }
+.brand-logo.sm { font-size: 16px; }
+.brand-logo.sm .mark { width: 24px; height: 24px; }
+
+/* ═══════════ AUTH LAYOUT ═══════════ */
+.auth-screen {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.auth-side {
+  background: var(--ink);
+  color: #fff;
+  padding: 48px 56px;
+  display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+}
+.auth-side::before {
+  content: '';
+  position: absolute;
+  top: -150px; right: -150px;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(26,107,74,0.25) 0%, transparent 70%);
+}
+.auth-side-content {
+  margin-top: auto; position: relative; z-index: 1;
+  max-width: 480px;
+}
+.auth-side-content h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 38px; font-weight: 800;
+  line-height: 1.1; margin-bottom: 18px;
+  letter-spacing: -0.02em;
+}
+.auth-side-content h2 em { font-style: italic; color: #86EFBF; }
+.auth-side-content p {
+  font-size: 15px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.6;
+  margin-bottom: 36px;
+}
+.auth-side-quote {
+  border-left: 2px solid #86EFBF;
+  padding-left: 18px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  font-style: italic;
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+.auth-side-quote-meta { font-size: 12px; color: rgba(255,255,255,0.4); padding-left: 20px; }
+
+.auth-main {
+  padding: 48px 56px;
+  display: flex; flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+.auth-form-wrap {
+  max-width: 380px; width: 100%;
+  margin: 0 auto;
+}
+.auth-form-wrap h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px; font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.auth-form-wrap .auth-sub {
+  font-size: 14px; color: var(--muted);
+  margin-bottom: 32px;
+}
+.auth-form-wrap .auth-sub a { font-weight: 500; }
+.auth-form-wrap .auth-bottom {
+  text-align: center; margin-top: 24px;
+  font-size: 13px; color: var(--muted);
+}
+
+/* form basics */
+.fg { margin-bottom: 16px; }
+label { display: block; font-size: 12.5px; font-weight: 500; color: var(--muted); margin-bottom: 6px; }
+label .req { color: var(--accent); }
+input[type=text], input[type=email], input[type=password], input[type=tel], input[type=number], textarea, select {
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 13px;
+  font-size: 14px; color: var(--text);
+  outline: none;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(26,107,74,0.1);
+}
+input::placeholder, textarea::placeholder { color: var(--muted2); }
+textarea { resize: vertical; min-height: 80px; }
+
+.btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 22px;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
+}
+.btn:hover { background: var(--accent-dk); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,107,74,0.2); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn.full { width: 100%; padding: 13px; }
+.btn.sm { padding: 7px 14px; font-size: 13px; }
+.btn.ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn.ghost:hover { background: var(--surface); border-color: var(--border2); }
+.btn.danger { background: var(--red); }
+.btn.danger:hover { background: #9a2c20; }
+.btn.icon { padding: 7px; width: 32px; height: 32px; }
+
+.help-link {
+  font-size: 12.5px;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* ═══════════ APP SHELL ═══════════ */
+.app-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+.sidebar {
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  padding: 22px 16px;
+  display: flex; flex-direction: column;
+  position: sticky; top: 0; height: 100vh;
+}
+.sidebar-logo { padding: 0 8px 22px; }
+.sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+.sidebar-link {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 14px; font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+.sidebar-link:hover { background: var(--surface); color: var(--text); }
+.sidebar-link.active { background: var(--accent-lt); color: var(--accent); font-weight: 600; }
+.sidebar-link svg { flex-shrink: 0; width: 18px; height: 18px; }
+
+.sidebar-divider { margin: 16px 0 8px; padding: 0 12px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted2); font-weight: 700; }
+
+.sidebar-bottom {
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer;
+  padding: 16px 12px 0;
+}
+.user-avatar {
+  width: 32px; height: 32px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600;
+}
+.user-name { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.2; }
+.user-email { font-size: 11px; color: var(--muted2); line-height: 1.2; }
+
+.app-main {
+  padding: 32px 40px;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.page-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 28px;
+  gap: 16px;
+}
+.page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px; font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.page-sub { font-size: 14px; color: var(--muted); margin-top: 4px; }
+
+/* ── DASHBOARD ── */
+.dash-tools {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 24px;
+}
+.search-box {
+  flex: 1; max-width: 420px;
+  position: relative;
+}
+.search-box input {
+  padding-left: 38px;
+  background: var(--white);
+}
+.search-box svg {
+  position: absolute;
+  left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--muted2);
+}
+
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+.proj-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  display: flex; flex-direction: column;
+  gap: 10px;
+  min-height: 180px;
+}
+.proj-card:hover { border-color: var(--accent-md); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(26,24,20,0.06); }
+.proj-card-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 10px;
+}
+.proj-icon {
+  width: 36px; height: 36px;
+  background: var(--accent-lt);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.status-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.status-tag.draft     { background: var(--amber-lt); color: var(--amber); }
+.status-tag.exported  { background: var(--accent-lt); color: var(--accent); }
+.status-tag.generating{ background: var(--blue-lt);  color: var(--blue); }
+.status-tag.error     { background: var(--red-lt);   color: var(--red); }
+
+.proj-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; font-weight: 700;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.proj-file {
+  font-size: 12px; color: var(--muted2);
+  display: flex; align-items: center; gap: 5px;
+}
+.proj-meta {
+  font-size: 12px; color: var(--muted);
+  display: flex; gap: 12px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+}
+
+/* new project card */
+.proj-card.new {
+  background: var(--surface);
+  border-style: dashed;
+  border-color: var(--border2);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--muted);
+  min-height: 180px;
+}
+.proj-card.new:hover { background: var(--accent-lt); border-color: var(--accent-md); color: var(--accent); }
+.proj-card.new .plus { font-size: 36px; font-weight: 300; line-height: 1; margin-bottom: 6px; }
+.proj-card.new .label { font-size: 14px; font-weight: 600; }
+
+/* empty state */
+.empty-state {
+  background: var(--white);
+  border: 1px dashed var(--border2);
+  border-radius: 16px;
+  padding: 80px 40px;
+  text-align: center;
+}
+.empty-illu { font-size: 64px; margin-bottom: 16px; }
+.empty-state h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px; font-weight: 800;
+  color: var(--ink); margin-bottom: 8px;
+}
+.empty-state p { font-size: 14px; color: var(--muted); margin-bottom: 24px; max-width: 360px; margin-left: auto; margin-right: auto; }
+
+/* ═══════════ WIZARD ═══════════ */
+.wizard-shell {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+}
+.wizard-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.wizard-steps {
+  display: flex; align-items: center; gap: 12px;
+}
+.w-step {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--muted2);
+  font-weight: 500;
+}
+.w-step-num {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  color: var(--muted2);
+}
+.w-step.active .w-step-num { background: var(--accent); border-color: var(--accent); color: #fff; }
+.w-step.active { color: var(--text); font-weight: 600; }
+.w-step.done .w-step-num { background: var(--accent-lt); border-color: var(--accent-md); color: var(--accent); }
+.w-step.done { color: var(--accent); }
+.w-step-line {
+  width: 28px; height: 1.5px;
+  background: var(--border);
+}
+.w-step.done + .w-step-line { background: var(--accent-md); }
+
+.wizard-body {
+  flex: 1;
+  padding: 60px 40px;
+  display: flex; align-items: flex-start; justify-content: center;
+}
+.wizard-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 48px;
+  max-width: 720px; width: 100%;
+}
+.wizard-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px; font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.wizard-card .wcard-sub {
+  font-size: 14px; color: var(--muted);
+  margin-bottom: 32px;
+}
+
+/* dropzone */
+.dropzone {
+  border: 2px dashed var(--border2);
+  border-radius: 14px;
+  padding: 56px 24px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--surface);
+  transition: all 0.2s;
+}
+.dropzone:hover, .dropzone.drag {
+  border-color: var(--accent);
+  background: var(--accent-lt);
+}
+.dropzone-icon { font-size: 40px; margin-bottom: 12px; display: block; }
+.dropzone h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  margin-bottom: 6px;
+  color: var(--ink);
+}
+.dropzone p { font-size: 13px; color: var(--muted); }
+.dropzone .formats {
+  display: inline-flex; gap: 6px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.dropzone .formats span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 3px 8px;
+  border-radius: 4px;
+  color: var(--muted);
+}
+
+/* parse progress */
+.parse-progress {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex; align-items: center; gap: 16px;
+}
+.parse-icon {
+  width: 44px; height: 44px;
+  background: var(--accent-lt);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.parse-info { flex: 1; min-width: 0; }
+.parse-file { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.parse-status { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.parse-bar { background: var(--border); height: 4px; border-radius: 2px; overflow: hidden; margin-top: 10px; }
+.parse-bar-fill { height: 100%; background: var(--accent); width: 0; transition: width 0.3s; }
+
+/* params form */
+.radio-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.radio-card {
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  cursor: pointer;
+  text-align: center;
+  background: var(--white);
+  transition: all 0.15s;
+}
+.radio-card:hover { border-color: var(--border2); background: var(--surface); }
+.radio-card.selected { border-color: var(--accent); background: var(--accent-lt); }
+.radio-card-title { font-weight: 600; font-size: 14px; color: var(--text); }
+.radio-card-desc { font-size: 11px; color: var(--muted2); margin-top: 3px; }
+
+.range-row { padding: 4px 0; }
+.range-row .range-label {
+  display: flex; justify-content: space-between;
+  font-size: 12.5px; color: var(--muted);
+  margin-bottom: 8px;
+}
+.range-row .range-label b {
+  color: var(--accent); font-weight: 700;
+  font-family: 'Playfair Display', serif; font-size: 15px;
+}
+input[type=range] {
+  width: 100%; height: 4px;
+  background: var(--border); border-radius: 2px;
+  appearance: none; outline: none; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  appearance: none; width: 18px; height: 18px;
+  background: var(--accent); border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(26,107,74,0.3);
+  border: 2px solid #fff;
+}
+
+.wizard-footer {
+  display: flex; justify-content: space-between;
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+}
+
+/* generation progress */
+.gen-progress { padding: 24px 0; }
+.gen-overall {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 28px;
+}
+.gen-spinner {
+  width: 56px; height: 56px;
+  border: 4px solid var(--accent-lt);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.gen-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 700;
+  color: var(--ink);
+}
+.gen-eta { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+.gen-bar {
+  background: var(--border);
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+.gen-bar-fill { height: 100%; background: var(--accent); width: 0; transition: width 0.6s; }
+
+.gen-steps { display: flex; flex-direction: column; gap: 8px; }
+.gen-step {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
+  background: var(--surface);
+  border-radius: 10px;
+  font-size: 13.5px;
+  color: var(--muted);
+  transition: all 0.3s;
+}
+.gen-step.active { background: var(--accent-lt); color: var(--accent); font-weight: 600; }
+.gen-step.done { background: var(--white); color: var(--text); }
+.gen-step-icon {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--border);
+  color: var(--muted2);
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.gen-step.active .gen-step-icon {
+  background: var(--accent);
+  color: #fff;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+.gen-step.done .gen-step-icon { background: var(--accent); color: #fff; }
+
+/* ═══════════ EDITOR ═══════════ */
+.editor-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 64px 1fr;
+}
+.editor-topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+}
+.editor-top-left {
+  display: flex; align-items: center; gap: 14px;
+  flex: 1; min-width: 0;
+}
+.editor-back {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.editor-back:hover { background: var(--surface2); color: var(--text); }
+.editor-title-input {
+  flex: 1; min-width: 0;
+  background: transparent;
+  border: 1.5px solid transparent;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.editor-title-input:hover { background: var(--surface); }
+.editor-title-input:focus { background: var(--white); border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(26,107,74,0.1); }
+
+.save-status {
+  font-size: 12px;
+  color: var(--muted2);
+  display: flex; align-items: center; gap: 6px;
+  white-space: nowrap;
+}
+.save-status .dot {
+  width: 6px; height: 6px; background: var(--accent); border-radius: 50%;
+}
+
+.editor-top-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+.editor-tabs {
+  background: var(--surface);
+  padding: 2px;
+  border-radius: 8px;
+  display: flex;
+  gap: 0;
+}
+.editor-tab {
+  padding: 6px 14px;
+  font-size: 13px; font-weight: 500;
+  color: var(--muted);
+  background: transparent;
+  border: none; cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.15s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.editor-tab.active { background: var(--white); color: var(--text); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+
+/* editor body */
+.editor-body {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  overflow: hidden;
+  min-height: 0;
+}
+.editor-tree {
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 16px 12px;
+}
+.tree-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted2);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 8px 8px 6px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.tree-add-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--accent);
+  font-size: 16px; line-height: 1;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.tree-add-btn:hover { background: var(--accent-lt); }
+
+.tree-module { margin-bottom: 4px; }
+.tree-mod-head {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 8px;
+  font-size: 13px; font-weight: 600;
+  color: var(--text);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.tree-mod-head:hover { background: var(--surface); }
+.tree-mod-head .chev { font-size: 10px; color: var(--muted2); width: 12px; }
+.tree-mod-head .mod-num {
+  font-size: 10px; font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-lt);
+  width: 18px; height: 18px;
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+}
+.tree-mod-head .mod-title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tree-mod-head .drag-handle { opacity: 0; color: var(--muted2); cursor: grab; padding: 0 2px; }
+.tree-mod-head:hover .drag-handle { opacity: 1; }
+
+.tree-mod-children { padding-left: 22px; }
+.tree-slide {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 8px;
+  font-size: 12.5px;
+  color: var(--muted);
+  border-radius: 6px;
+  cursor: pointer;
+  line-height: 1.4;
+}
+.tree-slide:hover { background: var(--surface); color: var(--text); }
+.tree-slide.active { background: var(--accent-lt); color: var(--accent); font-weight: 600; }
+.tree-slide .slide-icon { font-size: 10px; color: var(--muted2); width: 14px; flex-shrink: 0; }
+.tree-slide.active .slide-icon { color: var(--accent); }
+
+.tree-test-link {
+  margin-top: 16px;
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 13px; font-weight: 600;
+  color: var(--text);
+}
+.tree-test-link:hover, .tree-test-link.active { background: var(--accent-lt); color: var(--accent); }
+
+/* editor content */
+.editor-content {
+  overflow-y: auto;
+  padding: 28px 36px;
+  max-width: 100%;
+}
+.slide-edit-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.slide-edit-head {
+  display: flex; align-items: flex-start; gap: 14px;
+  margin-bottom: 18px;
+}
+.slide-num-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  background: var(--surface);
+  color: var(--muted);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.slide-title-input {
+  flex: 1;
+  background: transparent;
+  border: 1.5px solid transparent;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ink);
+  width: 100%;
+}
+.slide-title-input:hover { background: var(--surface); }
+.slide-title-input:focus { background: var(--white); border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(26,107,74,0.1); }
+
+.rich-toolbar {
+  display: flex; align-items: center; gap: 4px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px 8px 0 0;
+  border-bottom: none;
+}
+.rich-btn {
+  width: 30px; height: 30px;
+  background: transparent;
+  border: none; cursor: pointer;
+  border-radius: 6px;
+  color: var(--muted);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+}
+.rich-btn:hover { background: var(--white); color: var(--text); }
+.rich-divider { width: 1px; height: 18px; background: var(--border); margin: 0 4px; }
+
+.rich-editor {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 0 0 8px 8px;
+  padding: 18px 20px;
+  min-height: 240px;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--text);
+  outline: none;
+}
+.rich-editor:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,107,74,0.05); }
+.rich-editor ul, .rich-editor ol { margin-left: 22px; margin-bottom: 10px; }
+.rich-editor p { margin-bottom: 10px; }
+
+.slide-actions {
+  display: flex; gap: 8px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.slide-meta {
+  margin-top: 28px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border-radius: 10px;
+}
+.slide-meta-label {
+  font-size: 11px;
+  color: var(--muted2);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.slide-meta-text {
+  font-size: 13.5px;
+  color: var(--text);
+  line-height: 1.55;
+}
+
+/* module-level questions block */
+.module-questions-block {
+  max-width: 720px;
+  margin: 28px auto 0;
+  padding: 24px;
+  background: var(--surface);
+  border-radius: 14px;
+}
+.mqb-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px;
+}
+.mqb-sub {
+  font-size: 12.5px; color: var(--muted);
+  margin-bottom: 16px;
+}
+.q-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 10px;
+}
+.q-card-head {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin-bottom: 12px;
+}
+.q-num {
+  background: var(--accent-lt);
+  color: var(--accent);
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  flex-shrink: 0;
+}
+.q-text {
+  font-size: 14px; font-weight: 600;
+  color: var(--text);
+  flex: 1;
+  background: transparent;
+  border: 1.5px solid transparent;
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+.q-text:hover { background: var(--surface); }
+.q-text:focus { background: var(--white); border-color: var(--accent); outline: none; }
+.q-options { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.q-option-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--surface);
+  transition: all 0.15s;
+}
+.q-option-row.correct {
+  background: var(--accent-lt);
+  border: 1px solid var(--accent-md);
+}
+.q-option-radio {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--border2);
+  background: var(--white);
+  flex-shrink: 0;
+  cursor: pointer;
+  position: relative;
+}
+.q-option-row.correct .q-option-radio { border-color: var(--accent); background: var(--accent); }
+.q-option-row.correct .q-option-radio::after {
+  content: ''; position: absolute;
+  top: 3px; left: 3px;
+  width: 8px; height: 8px;
+  background: #fff;
+  border-radius: 50%;
+}
+.q-option-text {
+  flex: 1; font-size: 13px; color: var(--text);
+  background: transparent; border: none; outline: none;
+  padding: 2px 4px;
+}
+.q-actions {
+  display: flex; gap: 6px;
+  border-top: 1px dashed var(--border);
+  padding-top: 10px;
+}
+
+/* test full editor */
+.test-shell {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.test-meta-bar {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px;
+}
+.test-meta-left h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 800;
+  color: var(--ink);
+}
+.test-meta-left p { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+.test-pass {
+  display: flex; align-items: center; gap: 10px;
+}
+.test-pass label { margin-bottom: 0; }
+.test-pass input { width: 70px; text-align: center; }
+
+/* ═══════════ MODAL ═══════════ */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(26,24,20,0.55);
+  backdrop-filter: blur(4px);
+  z-index: 150;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+}
+.modal {
+  background: var(--white);
+  border-radius: 18px;
+  max-width: 600px; width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+}
+.modal.large { max-width: 880px; }
+.modal-head {
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-head h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 19px; font-weight: 700;
+  color: var(--ink);
+}
+.modal-close {
+  background: none; border: none; cursor: pointer;
+  font-size: 22px; color: var(--muted);
+  width: 28px; height: 28px;
+  border-radius: 6px;
+}
+.modal-close:hover { background: var(--surface); color: var(--text); }
+.modal-body { padding: 28px; }
+.modal-foot {
+  padding: 16px 28px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: flex-end; gap: 10px;
+  background: var(--surface);
+  border-radius: 0 0 18px 18px;
+}
+
+/* slide preview modal */
+.preview-slide {
+  background: linear-gradient(135deg, var(--white), var(--surface));
+  border-radius: 14px;
+  padding: 48px;
+  min-height: 380px;
+  border: 1px solid var(--border);
+  position: relative;
+}
+.preview-slide h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px; font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+.preview-slide-content {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text);
+}
+.preview-slide-content ul { margin-left: 22px; margin-top: 10px; }
+.preview-slide-content li { margin-bottom: 8px; }
+.preview-slide-footer {
+  position: absolute; bottom: 16px; right: 24px;
+  font-size: 11px; color: var(--muted2);
+}
+.preview-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 16px;
+}
+
+/* export modal */
+.export-options {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  margin-bottom: 20px;
+}
+.export-opt {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 22px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.export-opt:hover { border-color: var(--accent-md); background: var(--accent-lt); }
+.export-opt-icon {
+  width: 42px; height: 42px;
+  background: var(--accent-lt);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+.export-opt h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px; font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.export-opt p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.export-opt .file-info {
+  margin-top: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+}
+
+/* LMS quick check */
+.lms-check-box {
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.lms-check-box b { color: var(--text); }
+.lms-icons { display: flex; gap: 6px; margin-top: 8px; }
+.lms-icons span {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* utility */
+.hidden { display: none !important; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+
+/* mobile */
+@media (max-width: 900px) {
+  .auth-screen { grid-template-columns: 1fr; }
+  .auth-side { display: none; }
+  .app-layout { grid-template-columns: 1fr; }
+  .sidebar { position: relative; height: auto; flex-direction: row; padding: 12px; overflow-x: auto; }
+  .sidebar-bottom { display: none; }
+  .editor-body { grid-template-columns: 1fr; }
+  .editor-tree { max-height: 240px; }
+  .wizard-card { padding: 28px; }
+  .radio-row { grid-template-columns: 1fr; }
+  .export-options { grid-template-columns: 1fr; }
+  .demo-banner { left: 12px; right: 12px; bottom: 12px; max-width: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGO SVG SYMBOL -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="sf-mark" viewBox="0 0 32 32">
+    <rect width="32" height="32" rx="7" fill="#1A6B4A"/>
+    <path d="M16 6.5 L21.5 16.5 L17.5 14.8 L17.5 19 L14.5 19 L14.5 14.8 L10.5 16.5 Z" fill="#fff"/>
+    <rect x="9" y="21" width="14" height="2.2" rx="1" fill="#86EFBF"/>
+    <rect x="12.5" y="23.2" width="7" height="2.6" rx="0.5" fill="#86EFBF"/>
+  </symbol>
+
+  <!-- icons -->
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8v10a2 2 0 01-2 2h-4v-7h-6v7H5a2 2 0 01-2-2V11z"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.4 1.9l.1.1a2 2 0 01-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.4 1.7 1.7 0 00-1 1.5V21a2 2 0 01-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.9.4l-.1.1a2 2 0 01-2.8-2.8l.1-.1a1.7 1.7 0 00.4-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 010-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.4-1.9l-.1-.1a2 2 0 012.8-2.8l.1.1a1.7 1.7 0 001.9.4h0a1.7 1.7 0 001-1.5V3a2 2 0 014 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.4l.1-.1a2 2 0 012.8 2.8l-.1.1a1.7 1.7 0 00-.4 1.9v0a1.7 1.7 0 001.5 1H21a2 2 0 010 4h-.1a1.7 1.7 0 00-1.5 1z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 19l-7-7 7-7"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0114.8-3.4L23 10M1 14l4.7 4.4A9 9 0 0020.5 15"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></symbol>
+  <symbol id="i-drag" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="15" cy="18" r="1.5"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+</svg>
+
+<!-- DEMO BANNER -->
+<div class="demo-banner" id="demoBanner">
+  <div class="dot"></div>
+  <div>
+    <b>Демо-режим</b> — данные только в браузере.
+    <button class="reset-btn" onclick="resetDemo()">Сбросить</button>
+  </div>
+</div>
+
+<!-- APP ROOT -->
+<div id="app"></div>
+
+<!-- MODAL ROOT -->
+<div id="modal-root"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   STATE & MOCK DATA
+═══════════════════════════════════════════════════════════ */
+
+const DEMO_USER = {
+  name: 'Алибек Сейткали',
+  email: 'a.seitkali@samruk-academy.kz'
+};
+
+const SAMPLE_COURSE = {
+  title: 'Промышленная безопасность на производстве',
+  annotation: 'Курс охватывает базовые требования к охране труда и промышленной безопасности на производственных площадках компании. Подходит для всех новых сотрудников и для ежегодной переаттестации.',
+  modules: [
+    {
+      id: 'm1',
+      title: 'Основы охраны труда',
+      objective: 'После изучения модуля сотрудник сможет назвать ключевые принципы охраны труда и применять их на рабочем месте.',
+      slides: [
+        {
+          id: 's1',
+          title: 'Что такое охрана труда',
+          content: '<p><strong>Охрана труда</strong> — это система сохранения жизни и здоровья работников в процессе трудовой деятельности.</p><p>Она включает в себя комплекс мероприятий:</p><ul><li>Правовых — нормативные акты, регламенты компании</li><li>Социально-экономических — компенсации, страхование</li><li>Организационно-технических — инструктажи, проверки оборудования</li><li>Санитарно-гигиенических — условия труда, СИЗ</li><li>Лечебно-профилактических — медосмотры, реабилитация</li></ul>'
+        },
+        {
+          id: 's2',
+          title: 'Обязанности работника',
+          content: '<p>Согласно Трудовому кодексу РК, каждый работник обязан:</p><ul><li>Соблюдать требования охраны труда</li><li>Правильно применять средства индивидуальной защиты (СИЗ)</li><li>Проходить обучение и проверку знаний по охране труда</li><li>Немедленно сообщать руководителю о любой угрожающей ситуации</li><li>Проходить обязательные медицинские осмотры</li></ul>'
+        },
+        {
+          id: 's3',
+          title: 'Средства индивидуальной защиты',
+          content: '<p>СИЗ обязательны на всех производственных участках. Основные категории:</p><ul><li><strong>Защита головы:</strong> каска, подшлемник</li><li><strong>Защита глаз:</strong> очки, щитки сварщика</li><li><strong>Защита органов дыхания:</strong> респиратор, противогаз</li><li><strong>Защита рук:</strong> перчатки соответствующего класса</li><li><strong>Защита ног:</strong> ботинки с защитным подноском</li></ul><p>СИЗ выдаются работодателем бесплатно по утверждённым нормам.</p>'
+        }
+      ],
+      questions: [
+        { id: 'q1', text: 'Что является главной целью охраны труда?', options: ['Повышение производительности труда', 'Сохранение жизни и здоровья работников', 'Снижение затрат предприятия', 'Выполнение производственного плана'], correct: 1 },
+        { id: 'q2', text: 'Кто обязан обеспечивать работников СИЗ?', options: ['Сам работник', 'Профсоюз', 'Работодатель', 'Государство'], correct: 2 },
+        { id: 'q3', text: 'Что должен сделать работник при обнаружении опасности?', options: ['Продолжить работу', 'Самостоятельно устранить', 'Немедленно сообщить руководителю', 'Дождаться окончания смены'], correct: 2 }
+      ]
+    },
+    {
+      id: 'm2',
+      title: 'Производственный травматизм',
+      objective: 'После изучения модуля сотрудник сможет распознавать опасные ситуации и знать порядок действий при несчастном случае.',
+      slides: [
+        {
+          id: 's4',
+          title: 'Виды производственных травм',
+          content: '<p>Травмы классифицируются по нескольким признакам.</p><p><strong>По характеру повреждений:</strong></p><ul><li>Механические — ушибы, переломы, ранения</li><li>Термические — ожоги, обморожения</li><li>Химические — отравления, ожоги химикатами</li><li>Электрические — поражение током</li></ul><p><strong>По степени тяжести:</strong> лёгкие, тяжёлые, со смертельным исходом.</p>'
+        },
+        {
+          id: 's5',
+          title: 'Порядок действий при несчастном случае',
+          content: '<p>При несчастном случае на производстве:</p><ol><li>Немедленно оказать первую помощь пострадавшему</li><li>Принять меры по предотвращению дальнейших несчастных случаев</li><li>Сохранить обстановку до начала расследования</li><li>Сообщить непосредственному руководителю и в службу охраны труда</li><li>При необходимости вызвать скорую помощь (103)</li></ol>'
+        }
+      ],
+      questions: [
+        { id: 'q4', text: 'Какой номер скорой медицинской помощи в Казахстане?', options: ['101', '102', '103', '112'], correct: 2 },
+        { id: 'q5', text: 'Что нужно сделать в первую очередь при несчастном случае?', options: ['Сообщить родственникам', 'Оказать первую помощь', 'Заполнить акт', 'Сфотографировать место'], correct: 1 },
+        { id: 'q6', text: 'Кому необходимо сообщить о несчастном случае на производстве?', options: ['Только коллегам', 'Только родственникам', 'Руководителю и в службу охраны труда', 'Никому, разобраться самому'], correct: 2 }
+      ]
+    },
+    {
+      id: 'm3',
+      title: 'Пожарная безопасность',
+      objective: 'После изучения модуля сотрудник сможет действовать при пожаре и использовать первичные средства пожаротушения.',
+      slides: [
+        {
+          id: 's6',
+          title: 'Причины возникновения пожаров',
+          content: '<p>Основные причины пожаров на производстве:</p><ul><li>Неисправность электрооборудования</li><li>Нарушение правил эксплуатации оборудования</li><li>Курение в неустановленных местах</li><li>Неосторожное обращение с открытым огнём</li><li>Самовозгорание материалов</li></ul>'
+        },
+        {
+          id: 's7',
+          title: 'Действия при пожаре',
+          content: '<p>При обнаружении пожара необходимо:</p><ol><li>Немедленно сообщить по телефону <strong>101</strong> или <strong>112</strong></li><li>Оповестить людей и принять меры к их эвакуации</li><li>Принять меры к ликвидации пожара имеющимися средствами</li><li>Покинуть опасную зону через эвакуационные выходы</li><li>Встретить пожарные подразделения</li></ol>'
+        }
+      ],
+      questions: [
+        { id: 'q7', text: 'Какой номер пожарной службы?', options: ['101', '102', '103', '104'], correct: 0 },
+        { id: 'q8', text: 'Что нельзя использовать для тушения электрооборудования под напряжением?', options: ['Углекислотный огнетушитель', 'Порошковый огнетушитель', 'Воду', 'Песок'], correct: 2 }
+      ]
+    }
+  ],
+  passScore: 70
+};
+
+const SEED_PROJECTS = [
+  {
+    id: 'p1',
+    title: 'Промышленная безопасность на производстве',
+    sourceFilename: 'reglament_OT_2026.pdf',
+    status: 'draft',
+    createdAt: '2026-05-12T10:24:00Z',
+    updatedAt: '2026-05-19T16:42:00Z',
+    params: { audience: 'Сотрудники производственных участков', difficulty: 'basic', modulesCount: 3, testQuestionsCount: 10 },
+    content: SAMPLE_COURSE
+  },
+  {
+    id: 'p2',
+    title: 'Комплаенс и антикоррупционная политика',
+    sourceFilename: 'antikor_policy_v3.docx',
+    status: 'exported',
+    createdAt: '2026-04-28T09:15:00Z',
+    updatedAt: '2026-05-15T14:20:00Z',
+    params: { audience: 'Все сотрудники компании', difficulty: 'medium', modulesCount: 4, testQuestionsCount: 12 },
+    content: null
+  },
+  {
+    id: 'p3',
+    title: 'Стандарты обслуживания клиентов',
+    sourceFilename: 'service_standards.pptx',
+    status: 'draft',
+    createdAt: '2026-05-08T11:00:00Z',
+    updatedAt: '2026-05-18T17:30:00Z',
+    params: { audience: 'Менеджеры по работе с клиентами', difficulty: 'medium', modulesCount: 3, testQuestionsCount: 10 },
+    content: null
+  }
+];
+
+const LS_KEY = 'skillforge_demo_state_v1';
+
+let state = loadState();
+
+function loadState() {
+  try {
+    const s = localStorage.getItem(LS_KEY);
+    if (s) return JSON.parse(s);
+  } catch(e) {}
+  return {
+    auth: false,
+    user: null,
+    projects: JSON.parse(JSON.stringify(SEED_PROJECTS)),
+    wizardDraft: null
+  };
+}
+function saveState() { localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+function resetDemo() {
+  if (!confirm('Сбросить все демо-данные?')) return;
+  localStorage.removeItem(LS_KEY);
+  state = loadState();
+  navigate('/login');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ROUTER
+═══════════════════════════════════════════════════════════ */
+const routes = {};
+function registerRoute(pattern, fn) { routes[pattern] = fn; }
+function navigate(path) { location.hash = '#' + path; }
+function currentPath() {
+  const h = location.hash.replace(/^#/, '');
+  return h || '/login';
+}
+function matchRoute(path) {
+  for (const pat of Object.keys(routes)) {
+    const re = new RegExp('^' + pat.replace(/:[a-z]+/g, '([^/]+)') + '$');
+    const m = path.match(re);
+    if (m) {
+      const keys = (pat.match(/:[a-z]+/g) || []).map(k => k.slice(1));
+      const params = {};
+      keys.forEach((k, i) => params[k] = m[i+1]);
+      return { fn: routes[pat], params };
+    }
+  }
+  return null;
+}
+function render() {
+  const path = currentPath();
+  const r = matchRoute(path);
+  const app = document.getElementById('app');
+  closeModal();
+  if (r) {
+    app.innerHTML = r.fn(r.params);
+    if (r.fn.onMount) r.fn.onMount(r.params);
+  } else {
+    app.innerHTML = `<div class="auth-screen"><div class="auth-main"><div class="auth-form-wrap"><h1>404</h1><p class="auth-sub">Страница не найдена</p><a href="#/login" class="btn">На главную</a></div></div></div>`;
+  }
+  // gate: require auth except auth pages
+  const publicPaths = ['/login','/register','/forgot','/reset'];
+  if (!state.auth && !publicPaths.includes(path) && !path.startsWith('/reset')) {
+    navigate('/login');
+  }
+}
+window.addEventListener('hashchange', render);
+
+/* ═══════════════════════════════════════════════════════════
+   AUTH SCREENS
+═══════════════════════════════════════════════════════════ */
+function authSidePane(quote) {
+  return `
+    <div class="auth-side">
+      <a href="#/login" class="brand-logo dark">
+        <svg class="mark" viewBox="0 0 32 32"><use href="#sf-mark"/></svg>
+        <span>Skill<em>Forge</em></span>
+      </a>
+      <div class="auth-side-content">
+        <h2>Курсы из <em>регламентов</em><br>за час, не за месяцы</h2>
+        <p>Загрузите PDF с регламентом — получите готовый SCORM-курс с тестом. Без методологов, дизайнеров и потерянного времени.</p>
+        ${quote ? `
+          <div class="auth-side-quote">${quote.text}</div>
+          <div class="auth-side-quote-meta">${quote.meta}</div>
+        ` : ''}
+      </div>
+    </div>
+  `;
+}
+
+registerRoute('/login', () => `
+  <div class="auth-screen">
+    ${authSidePane({ text: '«Раньше один курс по технике безопасности отнимал у методологов 2 месяца. Теперь — рабочий день».', meta: 'Корпоративный университет производственной компании' })}
+    <div class="auth-main">
+      <div class="auth-form-wrap">
+        <h1>Вход в SkillForge</h1>
+        <p class="auth-sub">Нет аккаунта? <a href="#/register">Зарегистрироваться</a></p>
+        <form onsubmit="event.preventDefault(); doLogin();">
+          <div class="fg">
+            <label>Рабочий email <span class="req">*</span></label>
+            <input type="email" id="lg-email" placeholder="a.seitkali@company.kz" value="${DEMO_USER.email}" required>
+          </div>
+          <div class="fg">
+            <label>Пароль <span class="req">*</span></label>
+            <input type="password" id="lg-pass" placeholder="••••••••" value="demo1234" required>
+          </div>
+          <div class="fg" style="display:flex;justify-content:space-between;align-items:center">
+            <label style="display:flex;align-items:center;gap:6px;margin:0;cursor:pointer">
+              <input type="checkbox" style="width:auto" checked> <span>Запомнить меня</span>
+            </label>
+            <a href="#/forgot" class="help-link">Забыли пароль?</a>
+          </div>
+          <button class="btn full" type="submit">
+            Войти
+            <svg width="16" height="16"><use href="#i-arrow-right"/></svg>
+          </button>
+        </form>
+        <p class="auth-bottom">
+          <span style="font-size:11px;color:var(--muted2)">Демо: любые данные подойдут — кнопка просто залогинит</span>
+        </p>
+      </div>
+    </div>
+  </div>
+`);
+
+function doLogin() {
+  state.auth = true;
+  state.user = DEMO_USER;
+  saveState();
+  navigate('/projects');
+}
+
+registerRoute('/register', () => `
+  <div class="auth-screen">
+    ${authSidePane({ text: '«Архитектура AI-генерации позволяет нам за один день сгенерировать то, что раньше создавалось 3 месяца».', meta: 'T&D Lead, банковский сектор' })}
+    <div class="auth-main">
+      <div class="auth-form-wrap">
+        <h1>Регистрация</h1>
+        <p class="auth-sub">Уже есть аккаунт? <a href="#/login">Войти</a></p>
+        <form onsubmit="event.preventDefault(); doRegister();">
+          <div class="fg">
+            <label>Ваше имя <span class="req">*</span></label>
+            <input type="text" id="rg-name" placeholder="Алибек Сейткали" required>
+          </div>
+          <div class="fg">
+            <label>Рабочий email <span class="req">*</span></label>
+            <input type="email" id="rg-email" placeholder="a.seitkali@company.kz" required>
+          </div>
+          <div class="fg">
+            <label>Пароль <span class="req">*</span></label>
+            <input type="password" id="rg-pass" placeholder="Минимум 8 символов" required minlength="8">
+          </div>
+          <div class="fg">
+            <label style="display:flex;align-items:flex-start;gap:8px;margin:0;cursor:pointer;font-size:12px;line-height:1.5">
+              <input type="checkbox" style="width:auto;margin-top:3px" required>
+              <span>Я согласен с <a href="#">условиями использования</a> и <a href="#">политикой конфиденциальности</a></span>
+            </label>
+          </div>
+          <button class="btn full" type="submit">
+            Создать аккаунт
+            <svg width="16" height="16"><use href="#i-arrow-right"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+`);
+
+function doRegister() {
+  const name = document.getElementById('rg-name').value || DEMO_USER.name;
+  const email = document.getElementById('rg-email').value || DEMO_USER.email;
+  state.auth = true;
+  state.user = { name, email };
+  saveState();
+  navigate('/projects');
+}
+
+registerRoute('/forgot', () => `
+  <div class="auth-screen">
+    ${authSidePane(null)}
+    <div class="auth-main">
+      <div class="auth-form-wrap">
+        <h1>Восстановление пароля</h1>
+        <p class="auth-sub">Введите email — отправим ссылку для сброса</p>
+        <form onsubmit="event.preventDefault(); doForgot();">
+          <div class="fg">
+            <label>Email <span class="req">*</span></label>
+            <input type="email" id="fg-email" placeholder="a.seitkali@company.kz" required>
+          </div>
+          <button class="btn full" type="submit">
+            Отправить ссылку
+            <svg width="16" height="16"><use href="#i-arrow-right"/></svg>
+          </button>
+        </form>
+        <p class="auth-bottom"><a href="#/login" class="help-link">← Назад к входу</a></p>
+      </div>
+    </div>
+  </div>
+`);
+
+function doForgot() {
+  const app = document.querySelector('.auth-form-wrap');
+  app.innerHTML = `
+    <div style="text-align:center;padding:24px 0">
+      <div style="width:64px;height:64px;background:var(--accent-lt);border:2px solid var(--accent-md);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px">
+        <svg width="28" height="28" style="color:var(--accent)"><use href="#i-check"/></svg>
+      </div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:var(--ink);margin-bottom:8px">Ссылка отправлена</h1>
+      <p class="auth-sub">Проверьте почту и перейдите по ссылке из письма для сброса пароля.</p>
+      <a href="#/login" class="btn ghost" style="margin-top:8px">Вернуться ко входу</a>
+    </div>
+  `;
+}
+
+registerRoute('/reset', () => `
+  <div class="auth-screen">
+    ${authSidePane(null)}
+    <div class="auth-main">
+      <div class="auth-form-wrap">
+        <h1>Новый пароль</h1>
+        <p class="auth-sub">Придумайте пароль для входа в SkillForge</p>
+        <form onsubmit="event.preventDefault(); navigate('/login');">
+          <div class="fg">
+            <label>Новый пароль <span class="req">*</span></label>
+            <input type="password" placeholder="Минимум 8 символов" required minlength="8">
+          </div>
+          <div class="fg">
+            <label>Повторите пароль <span class="req">*</span></label>
+            <input type="password" placeholder="••••••••" required minlength="8">
+          </div>
+          <button class="btn full" type="submit">Сохранить пароль</button>
+        </form>
+      </div>
+    </div>
+  </div>
+`);
+
+/* ═══════════════════════════════════════════════════════════
+   APP SHELL — sidebar
+═══════════════════════════════════════════════════════════ */
+function appShell(activeKey, content) {
+  const initials = state.user ? state.user.name.split(' ').map(p => p[0]).join('').slice(0,2).toUpperCase() : 'А';
+  return `
+    <div class="app-layout">
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <a href="#/projects" class="brand-logo sm">
+            <svg class="mark" viewBox="0 0 32 32"><use href="#sf-mark"/></svg>
+            <span>Skill<em>Forge</em></span>
+          </a>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="#/projects" class="sidebar-link ${activeKey==='projects'?'active':''}">
+            <svg><use href="#i-folder"/></svg> Мои курсы
+          </a>
+          <a href="#/projects/new" class="sidebar-link ${activeKey==='new'?'active':''}">
+            <svg><use href="#i-plus"/></svg> Новый курс
+          </a>
+          <div class="sidebar-divider">Аккаунт</div>
+          <a href="#/account" class="sidebar-link ${activeKey==='account'?'active':''}">
+            <svg><use href="#i-settings"/></svg> Настройки
+          </a>
+          <a href="#/login" onclick="doLogout()" class="sidebar-link">
+            <svg><use href="#i-logout"/></svg> Выйти
+          </a>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="user-avatar">${initials}</div>
+          <div style="min-width:0">
+            <div class="user-name">${state.user ? state.user.name : 'Пользователь'}</div>
+            <div class="user-email" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px">${state.user ? state.user.email : ''}</div>
+          </div>
+        </div>
+      </aside>
+      <main class="app-main">${content}</main>
+    </div>
+  `;
+}
+
+function doLogout() {
+  state.auth = false;
+  state.user = null;
+  saveState();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DASHBOARD
+═══════════════════════════════════════════════════════════ */
+registerRoute('/projects', () => {
+  const projects = state.projects;
+  const list = projects.length === 0 ? `
+    <div class="empty-state">
+      <div class="empty-illu">📚</div>
+      <h2>У вас пока нет курсов</h2>
+      <p>Загрузите первый документ — регламент, инструкцию или политику — и получите готовый курс за минуты.</p>
+      <a href="#/projects/new" class="btn">
+        <svg width="16" height="16"><use href="#i-plus"/></svg>
+        Создать первый курс
+      </a>
+    </div>
+  ` : `
+    <div class="proj-grid">
+      <a href="#/projects/new" class="proj-card new">
+        <div class="plus">+</div>
+        <div class="label">Новый курс</div>
+      </a>
+      ${projects.map(p => projectCard(p)).join('')}
+    </div>
+  `;
+
+  return appShell('projects', `
+    <div class="page-header">
+      <div>
+        <div class="page-title">Мои курсы</div>
+        <div class="page-sub">${projects.length} ${pluralize(projects.length, 'курс', 'курса', 'курсов')} · последнее обновление ${projects.length ? formatRelative(projects[0].updatedAt) : '—'}</div>
+      </div>
+      <a href="#/projects/new" class="btn">
+        <svg width="16" height="16"><use href="#i-plus"/></svg>
+        Новый курс
+      </a>
+    </div>
+    ${projects.length ? `
+      <div class="dash-tools">
+        <div class="search-box">
+          <svg width="16" height="16"><use href="#i-search"/></svg>
+          <input type="text" id="proj-search" placeholder="Поиск по названию курса..." oninput="filterProjects(this.value)">
+        </div>
+      </div>
+    ` : ''}
+    <div id="proj-list">${list}</div>
+  `);
+});
+
+function projectCard(p) {
+  const statusLabel = { draft: 'Черновик', exported: 'Экспортирован', generating: 'Генерируется', error: 'Ошибка' }[p.status] || p.status;
+  const icons = ['🦺', '📋', '💼', '🏗️', '🎯', '🔧'];
+  const icon = icons[parseInt(p.id.slice(-1), 36) % icons.length];
+  return `
+    <a class="proj-card" href="#/projects/${p.id}/edit">
+      <div class="proj-card-head">
+        <div class="proj-icon">${icon}</div>
+        <span class="status-tag ${p.status}">${statusLabel}</span>
+      </div>
+      <div class="proj-title">${escapeHtml(p.title)}</div>
+      <div class="proj-file">
+        <svg width="12" height="12"><use href="#i-file"/></svg>
+        ${escapeHtml(p.sourceFilename)}
+      </div>
+      <div class="proj-meta">
+        <span>Обновлён ${formatRelative(p.updatedAt)}</span>
+      </div>
+    </a>
+  `;
+}
+
+function filterProjects(q) {
+  const filtered = state.projects.filter(p => p.title.toLowerCase().includes(q.toLowerCase()));
+  const html = filtered.length === 0
+    ? `<div class="empty-state" style="padding:60px 24px"><h2 style="font-size:18px">Ничего не найдено</h2><p>Попробуйте изменить запрос</p></div>`
+    : `<div class="proj-grid"><a href="#/projects/new" class="proj-card new"><div class="plus">+</div><div class="label">Новый курс</div></a>${filtered.map(p => projectCard(p)).join('')}</div>`;
+  document.getElementById('proj-list').innerHTML = html;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ACCOUNT
+═══════════════════════════════════════════════════════════ */
+registerRoute('/account', () => {
+  return appShell('account', `
+    <div class="page-header">
+      <div>
+        <div class="page-title">Настройки аккаунта</div>
+        <div class="page-sub">Профиль, пароль и параметры доступа</div>
+      </div>
+    </div>
+    <div style="max-width:560px">
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:18px">
+        <h3 style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:18px;color:var(--ink)">Профиль</h3>
+        <div class="fg">
+          <label>Имя</label>
+          <input type="text" value="${state.user.name}" id="acc-name">
+        </div>
+        <div class="fg">
+          <label>Email</label>
+          <input type="email" value="${state.user.email}" disabled style="opacity:0.6">
+        </div>
+        <button class="btn" onclick="saveAccount()">Сохранить</button>
+      </div>
+
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:18px">
+        <h3 style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:18px;color:var(--ink)">Сменить пароль</h3>
+        <div class="fg">
+          <label>Текущий пароль</label>
+          <input type="password" placeholder="••••••••">
+        </div>
+        <div class="fg">
+          <label>Новый пароль</label>
+          <input type="password" placeholder="Минимум 8 символов">
+        </div>
+        <button class="btn ghost" onclick="alert('Демо: пароль сохранён')">Обновить пароль</button>
+      </div>
+
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:28px">
+        <h3 style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:8px;color:var(--ink)">Опасная зона</h3>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:18px">Удаление аккаунта необратимо — все ваши курсы будут удалены.</p>
+        <button class="btn danger" onclick="if(confirm('Удалить аккаунт?')){doLogout();navigate('/login');}">Удалить аккаунт</button>
+      </div>
+    </div>
+  `);
+});
+
+function saveAccount() {
+  const name = document.getElementById('acc-name').value;
+  state.user.name = name;
+  saveState();
+  render();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   NEW PROJECT — wizard step 1: Upload
+═══════════════════════════════════════════════════════════ */
+function wizardSteps(activeStep) {
+  const steps = ['Загрузка', 'Параметры', 'Генерация'];
+  return `
+    <div class="wizard-steps">
+      ${steps.map((s, i) => `
+        <div class="w-step ${i+1===activeStep?'active':''} ${i+1<activeStep?'done':''}">
+          <div class="w-step-num">${i+1<activeStep?'✓':i+1}</div>
+          <span>${s}</span>
+        </div>
+        ${i < steps.length-1 ? '<div class="w-step-line"></div>' : ''}
+      `).join('')}
+    </div>
+  `;
+}
+
+function wizardHeader(active) {
+  return `
+    <header class="wizard-header">
+      <a href="#/projects" class="brand-logo sm">
+        <svg class="mark" viewBox="0 0 32 32"><use href="#sf-mark"/></svg>
+        <span>Skill<em>Forge</em></span>
+      </a>
+      ${wizardSteps(active)}
+      <a href="#/projects" class="btn ghost sm">Отмена</a>
+    </header>
+  `;
+}
+
+registerRoute('/projects/new', () => `
+  <div class="wizard-shell">
+    ${wizardHeader(1)}
+    <div class="wizard-body">
+      <div class="wizard-card">
+        <h2>Загрузите документ</h2>
+        <p class="wcard-sub">Регламент, инструкция, политика или НПА — любой документ компании. AI разберёт его и предложит структуру курса.</p>
+
+        <div class="dropzone" id="dropzone" onclick="simulateUpload()">
+          <span class="dropzone-icon">📄</span>
+          <h3>Перетащите файл сюда или выберите</h3>
+          <p>Максимум 50 МБ · русский или казахский язык</p>
+          <div class="formats">
+            <span>PDF</span><span>DOCX</span><span>PPTX</span><span>TXT</span>
+          </div>
+        </div>
+
+        <div id="upload-progress" class="hidden mt-24">
+          <div class="parse-progress">
+            <div class="parse-icon">📄</div>
+            <div class="parse-info">
+              <div class="parse-file" id="up-filename">reglament_OT_2026.pdf</div>
+              <div class="parse-status" id="up-status">Парсинг документа...</div>
+              <div class="parse-bar"><div class="parse-bar-fill" id="up-bar"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="wizard-footer">
+          <a href="#/projects" class="btn ghost">← Назад</a>
+          <button class="btn" id="up-next" disabled onclick="navigate('/projects/new/params')">
+            Дальше: параметры
+            <svg width="16" height="16"><use href="#i-arrow-right"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+`);
+
+function simulateUpload() {
+  document.getElementById('upload-progress').classList.remove('hidden');
+  const bar = document.getElementById('up-bar');
+  const status = document.getElementById('up-status');
+  const nextBtn = document.getElementById('up-next');
+  state.wizardDraft = {
+    filename: 'reglament_OT_2026.pdf',
+    fileSize: '2.4 МБ',
+    pageCount: 28
+  };
+  let p = 0;
+  const stages = [
+    [10, 'Загрузка файла...'],
+    [35, 'Извлечение текста из PDF...'],
+    [65, 'Определение языка документа...'],
+    [85, 'Анализ структуры...'],
+    [100, 'Готово — 28 страниц распознано']
+  ];
+  let i = 0;
+  const tick = () => {
+    if (i >= stages.length) {
+      nextBtn.disabled = false;
+      saveState();
+      return;
+    }
+    const [pct, msg] = stages[i++];
+    bar.style.width = pct + '%';
+    status.textContent = msg;
+    setTimeout(tick, 600);
+  };
+  tick();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   WIZARD STEP 2 — Params
+═══════════════════════════════════════════════════════════ */
+registerRoute('/projects/new/params', () => `
+  <div class="wizard-shell">
+    ${wizardHeader(2)}
+    <div class="wizard-body">
+      <div class="wizard-card">
+        <h2>Параметры курса</h2>
+        <p class="wcard-sub">Эти настройки помогут AI сгенерировать курс под нужную аудиторию.</p>
+
+        <div class="parse-progress" style="margin-bottom:24px">
+          <div class="parse-icon">📄</div>
+          <div class="parse-info">
+            <div class="parse-file">${state.wizardDraft?.filename || 'reglament_OT_2026.pdf'}</div>
+            <div class="parse-status">28 страниц · 2.4 МБ · русский язык</div>
+          </div>
+          <svg width="20" height="20" style="color:var(--accent);flex-shrink:0"><use href="#i-check"/></svg>
+        </div>
+
+        <div class="fg">
+          <label>Целевая аудитория курса <span class="req">*</span></label>
+          <input type="text" id="pm-aud" value="Сотрудники производственных участков" placeholder="Например: Менеджеры по работе с клиентами">
+        </div>
+
+        <div class="fg">
+          <label>Уровень сложности</label>
+          <div class="radio-row" id="pm-diff">
+            <div class="radio-card selected" data-val="basic" onclick="selDiff('basic')">
+              <div class="radio-card-title">Базовый</div>
+              <div class="radio-card-desc">Простой язык, основные понятия</div>
+            </div>
+            <div class="radio-card" data-val="medium" onclick="selDiff('medium')">
+              <div class="radio-card-title">Средний</div>
+              <div class="radio-card-desc">Стандартная глубина</div>
+            </div>
+            <div class="radio-card" data-val="advanced" onclick="selDiff('advanced')">
+              <div class="radio-card-title">Продвинутый</div>
+              <div class="radio-card-desc">Подробные объяснения</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fg">
+          <div class="range-row">
+            <div class="range-label">Количество модулей <b><span id="pm-mod-val">3</span></b></div>
+            <input type="range" id="pm-mod" min="2" max="10" value="3" oninput="document.getElementById('pm-mod-val').textContent=this.value">
+          </div>
+        </div>
+
+        <div class="fg">
+          <div class="range-row">
+            <div class="range-label">Вопросов в итоговом тесте <b><span id="pm-q-val">10</span></b></div>
+            <input type="range" id="pm-q" min="5" max="20" value="10" oninput="document.getElementById('pm-q-val').textContent=this.value">
+          </div>
+        </div>
+
+        <div class="wizard-footer">
+          <a href="#/projects/new" class="btn ghost">← Назад</a>
+          <button class="btn" onclick="startGeneration()">
+            Сгенерировать курс
+            <svg width="16" height="16"><use href="#i-arrow-right"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+`);
+
+function selDiff(v) {
+  document.querySelectorAll('#pm-diff .radio-card').forEach(c => {
+    c.classList.toggle('selected', c.dataset.val === v);
+  });
+}
+
+function startGeneration() {
+  const newId = 'p' + Date.now();
+  const proj = {
+    id: newId,
+    title: 'Промышленная безопасность на производстве',
+    sourceFilename: state.wizardDraft?.filename || 'reglament_OT_2026.pdf',
+    status: 'generating',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    params: {
+      audience: document.getElementById('pm-aud').value,
+      difficulty: document.querySelector('#pm-diff .selected')?.dataset.val || 'basic',
+      modulesCount: parseInt(document.getElementById('pm-mod').value),
+      testQuestionsCount: parseInt(document.getElementById('pm-q').value)
+    },
+    content: null
+  };
+  state.projects.unshift(proj);
+  state.wizardDraft = null;
+  saveState();
+  navigate('/projects/' + newId + '/generating');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   WIZARD STEP 3 — Generating
+═══════════════════════════════════════════════════════════ */
+registerRoute('/projects/:id/generating', ({ id }) => {
+  const p = state.projects.find(x => x.id === id);
+  if (!p) return '<div>Проект не найден</div>';
+  return `
+    <div class="wizard-shell">
+      ${wizardHeader(3)}
+      <div class="wizard-body">
+        <div class="wizard-card">
+          <h2>AI создаёт ваш курс</h2>
+          <p class="wcard-sub">Это займёт примерно 3–5 минут. Вы можете закрыть вкладку — мы пришлём ссылку на готовый курс.</p>
+          <div class="gen-progress">
+            <div class="gen-overall">
+              <div class="gen-spinner"></div>
+              <div>
+                <div class="gen-title" id="gen-title">Анализ документа...</div>
+                <div class="gen-eta" id="gen-eta">Осталось ≈ 4 мин 30 сек</div>
+              </div>
+            </div>
+            <div class="gen-bar"><div class="gen-bar-fill" id="gen-bar"></div></div>
+            <div class="gen-steps" id="gen-steps">
+              <div class="gen-step done" data-i="0">
+                <div class="gen-step-icon">✓</div>
+                <span>Документ загружен и обработан</span>
+              </div>
+              <div class="gen-step active" data-i="1">
+                <div class="gen-step-icon">1</div>
+                <span>Анализ структуры и определение модулей</span>
+              </div>
+              <div class="gen-step" data-i="2">
+                <div class="gen-step-icon">2</div>
+                <span>Модуль 1: «Основы охраны труда» — слайды и тест</span>
+              </div>
+              <div class="gen-step" data-i="3">
+                <div class="gen-step-icon">3</div>
+                <span>Модуль 2: «Производственный травматизм» — слайды и тест</span>
+              </div>
+              <div class="gen-step" data-i="4">
+                <div class="gen-step-icon">4</div>
+                <span>Модуль 3: «Пожарная безопасность» — слайды и тест</span>
+              </div>
+              <div class="gen-step" data-i="5">
+                <div class="gen-step-icon">5</div>
+                <span>Сборка итогового теста</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+});
+routes['/projects/:id/generating'].onMount = ({ id }) => {
+  const steps = ['Анализ структуры и определение модулей','Модуль 1: «Основы охраны труда»','Модуль 2: «Производственный травматизм»','Модуль 3: «Пожарная безопасность»','Сборка итогового теста','Готово!'];
+  let i = 1;
+  const tick = () => {
+    const allSteps = document.querySelectorAll('#gen-steps .gen-step');
+    if (!allSteps.length) return;
+    if (i >= 6) {
+      // Done
+      const p = state.projects.find(x => x.id === id);
+      if (p) {
+        p.status = 'draft';
+        p.content = JSON.parse(JSON.stringify(SAMPLE_COURSE));
+        p.updatedAt = new Date().toISOString();
+        saveState();
+      }
+      navigate('/projects/' + id + '/edit');
+      return;
+    }
+    allSteps.forEach((el, idx) => {
+      el.classList.remove('active','done');
+      if (idx < i) {
+        el.classList.add('done');
+        el.querySelector('.gen-step-icon').textContent = '✓';
+      } else if (idx === i) {
+        el.classList.add('active');
+      }
+    });
+    const title = document.getElementById('gen-title');
+    const eta = document.getElementById('gen-eta');
+    const bar = document.getElementById('gen-bar');
+    if (title) title.textContent = steps[i-1] + '...';
+    if (eta) eta.textContent = `Осталось ≈ ${Math.max(0, 5 - i)} мин`;
+    if (bar) bar.style.width = Math.round((i / 6) * 100) + '%';
+    i++;
+    setTimeout(tick, 1800);
+  };
+  setTimeout(tick, 1500);
+};
+
+/* ═══════════════════════════════════════════════════════════
+   EDITOR
+═══════════════════════════════════════════════════════════ */
+let editorState = { activeSlideId: null, view: 'slide' /* slide|module-questions|test */ };
+
+registerRoute('/projects/:id/edit', ({ id }) => {
+  const p = state.projects.find(x => x.id === id);
+  if (!p) return '<div>Проект не найден</div>';
+  if (!p.content) p.content = JSON.parse(JSON.stringify(SAMPLE_COURSE));
+  if (!editorState.activeSlideId) {
+    editorState.activeSlideId = p.content.modules[0].slides[0].id;
+    editorState.view = 'slide';
+  }
+  return renderEditor(p);
+});
+routes['/projects/:id/edit'].onMount = ({ id }) => {
+  attachEditorListeners(id);
+};
+
+function renderEditor(p) {
+  const c = p.content;
+  return `
+    <div class="editor-shell">
+      <header class="editor-topbar">
+        <div class="editor-top-left">
+          <a href="#/projects" class="editor-back" title="К списку курсов">
+            <svg width="18" height="18"><use href="#i-arrow-left"/></svg>
+          </a>
+          <input type="text" class="editor-title-input" id="ed-title" value="${escapeAttr(c.title)}" oninput="onTitleChange('${p.id}', this.value)">
+          <span class="save-status"><span class="dot"></span> Сохранено только что</span>
+        </div>
+        <div class="editor-top-right">
+          <div class="editor-tabs">
+            <button class="editor-tab ${editorState.view!=='test'?'active':''}" onclick="setEditorView('slide')">
+              <svg width="14" height="14"><use href="#i-folder"/></svg> Курс
+            </button>
+            <button class="editor-tab ${editorState.view==='test'?'active':''}" onclick="setEditorView('test')">
+              📝 Тест
+            </button>
+          </div>
+          <button class="btn ghost sm" onclick="openSlidePreview('${p.id}')">
+            <svg width="14" height="14"><use href="#i-eye"/></svg> Превью
+          </button>
+          <button class="btn sm" onclick="openExport('${p.id}')">
+            <svg width="14" height="14"><use href="#i-download"/></svg> Экспорт
+          </button>
+        </div>
+      </header>
+
+      <div class="editor-body">
+        <aside class="editor-tree">
+          <div class="tree-section-title">
+            <span>Структура курса</span>
+            <button class="tree-add-btn" title="Добавить модуль" onclick="addModule('${p.id}')">+</button>
+          </div>
+          ${c.modules.map((m, mi) => renderTreeModule(m, mi+1)).join('')}
+          <div class="tree-test-link ${editorState.view==='test'?'active':''}" onclick="setEditorView('test')">
+            📝 Итоговый тест
+            <span style="margin-left:auto;font-size:11px;color:var(--muted2);font-weight:500">${countQuestions(c)} вопр.</span>
+          </div>
+        </aside>
+
+        <section class="editor-content" id="ed-content">
+          ${editorState.view === 'test' ? renderTestEditor(p) : renderSlideEditor(p)}
+        </section>
+      </div>
+    </div>
+  `;
+}
+
+function renderTreeModule(m, num) {
+  const slides = m.slides.map(s => `
+    <div class="tree-slide ${editorState.activeSlideId===s.id?'active':''}" onclick="selectSlide('${s.id}')">
+      <span class="slide-icon">▢</span>
+      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(s.title)}</span>
+    </div>
+  `).join('');
+  return `
+    <div class="tree-module">
+      <div class="tree-mod-head">
+        <span class="drag-handle"><svg width="12" height="12"><use href="#i-drag"/></svg></span>
+        <span class="chev">▾</span>
+        <span class="mod-num">${num}</span>
+        <span class="mod-title">${escapeHtml(m.title)}</span>
+      </div>
+      <div class="tree-mod-children">
+        ${slides}
+        <div class="tree-slide" onclick="selectModuleQuestions('${m.id}')" style="color:var(--accent)">
+          <span class="slide-icon">?</span>
+          <span>Вопросы модуля (${m.questions.length})</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function findSlide(p, slideId) {
+  for (const m of p.content.modules) {
+    const s = m.slides.find(x => x.id === slideId);
+    if (s) return { module: m, slide: s };
+  }
+  return null;
+}
+
+function renderSlideEditor(p) {
+  if (editorState.view === 'module-questions') {
+    const m = p.content.modules.find(x => x.id === editorState.activeModuleId);
+    if (!m) return '';
+    return `
+      <div class="module-questions-block" style="margin-top:0">
+        <div class="mqb-title">📝 Вопросы модуля «${escapeHtml(m.title)}»</div>
+        <div class="mqb-sub">Эти вопросы проверяют знания по конкретному модулю. Также войдут в итоговый тест.</div>
+        ${m.questions.map((q, i) => renderQuestionCard(q, i+1, p.id, m.id)).join('')}
+        <button class="btn ghost sm" onclick="alert('Демо: добавление вопроса')" style="margin-top:8px">
+          <svg width="12" height="12"><use href="#i-plus"/></svg> Добавить вопрос
+        </button>
+      </div>
+    `;
+  }
+  const found = findSlide(p, editorState.activeSlideId);
+  if (!found) return '<div>Слайд не найден</div>';
+  const { module: m, slide: s } = found;
+  const slideIdx = m.slides.findIndex(x => x.id === s.id);
+  return `
+    <div class="slide-edit-wrap">
+      <div class="slide-edit-head">
+        <span class="slide-num-tag">МОДУЛЬ ${state.projects.find(x=>x.id===p.id).content.modules.findIndex(x=>x.id===m.id)+1} · СЛАЙД ${slideIdx+1}</span>
+      </div>
+      <input type="text" class="slide-title-input" id="slide-title" value="${escapeAttr(s.title)}" oninput="updateSlide('${p.id}', '${s.id}', 'title', this.value)">
+
+      <div style="margin-top:18px">
+        <div class="rich-toolbar">
+          <button class="rich-btn" onclick="doRich('bold')" title="Жирный"><b>B</b></button>
+          <button class="rich-btn" onclick="doRich('italic')" title="Курсив"><i>I</i></button>
+          <button class="rich-btn" onclick="doRich('underline')" title="Подчёркнутый"><u>U</u></button>
+          <div class="rich-divider"></div>
+          <button class="rich-btn" onclick="doRich('insertUnorderedList')" title="Список">•</button>
+          <button class="rich-btn" onclick="doRich('insertOrderedList')" title="Нумерованный">1.</button>
+          <div class="rich-divider"></div>
+          <button class="rich-btn" onclick="doRich('formatBlock','H3')" title="Подзаголовок">H</button>
+          <button class="rich-btn" onclick="doRich('removeFormat')" title="Очистить">✕</button>
+        </div>
+        <div class="rich-editor" contenteditable="true" id="slide-content" oninput="updateSlide('${p.id}', '${s.id}', 'content', this.innerHTML)">${s.content}</div>
+      </div>
+
+      <div class="slide-actions">
+        <button class="btn ghost sm" onclick="regenerateSlide('${s.id}')">
+          <svg width="14" height="14"><use href="#i-refresh"/></svg> Регенерировать слайд
+        </button>
+        <button class="btn ghost sm" onclick="openSlidePreview('${p.id}','${s.id}')">
+          <svg width="14" height="14"><use href="#i-eye"/></svg> Превью
+        </button>
+        <button class="btn ghost sm" onclick="addSlide('${p.id}', '${m.id}')">
+          <svg width="14" height="14"><use href="#i-plus"/></svg> Добавить слайд
+        </button>
+        <button class="btn ghost sm" onclick="deleteSlide('${p.id}', '${s.id}')" style="color:var(--red)">
+          <svg width="14" height="14"><use href="#i-trash"/></svg> Удалить
+        </button>
+      </div>
+
+      <div class="slide-meta">
+        <div class="slide-meta-label">Цель модуля</div>
+        <div class="slide-meta-text">${escapeHtml(m.objective)}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderQuestionCard(q, num, pid, mid) {
+  return `
+    <div class="q-card">
+      <div class="q-card-head">
+        <span class="q-num">Q${String(num).padStart(2,'0')}</span>
+        <input class="q-text" value="${escapeAttr(q.text)}" onchange="updateQuestion('${pid}','${q.id}','text',this.value)">
+      </div>
+      <div class="q-options">
+        ${q.options.map((opt, i) => `
+          <div class="q-option-row ${i===q.correct?'correct':''}" onclick="setCorrect('${pid}','${q.id}',${i})">
+            <div class="q-option-radio"></div>
+            <input class="q-option-text" value="${escapeAttr(opt)}" onclick="event.stopPropagation()" onchange="updateOption('${pid}','${q.id}',${i},this.value)">
+          </div>
+        `).join('')}
+      </div>
+      <div class="q-actions">
+        <button class="btn ghost sm" onclick="alert('Демо: регенерация вопроса через AI')">
+          <svg width="12" height="12"><use href="#i-refresh"/></svg> Регенерировать
+        </button>
+        <button class="btn ghost sm" onclick="alert('Демо: удаление вопроса')" style="color:var(--red)">
+          <svg width="12" height="12"><use href="#i-trash"/></svg> Удалить
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function renderTestEditor(p) {
+  const allQuestions = [];
+  p.content.modules.forEach(m => m.questions.forEach(q => allQuestions.push({ q, m })));
+  return `
+    <div class="test-shell">
+      <div class="test-meta-bar">
+        <div class="test-meta-left">
+          <h2>Итоговый тест</h2>
+          <p>${allQuestions.length} ${pluralize(allQuestions.length,'вопрос','вопроса','вопросов')} · собран из всех модулей</p>
+        </div>
+        <div class="test-pass">
+          <label>Проходной балл</label>
+          <input type="number" min="0" max="100" value="${p.content.passScore || 70}" onchange="updatePassScore('${p.id}', this.value)">
+          <span style="font-size:13px;color:var(--muted)">%</span>
+        </div>
+      </div>
+
+      ${p.content.modules.map((m, mi) => `
+        <div style="margin-bottom:24px">
+          <div style="font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:0.08em;font-weight:700;margin-bottom:10px;padding-left:4px">
+            Модуль ${mi+1} · ${escapeHtml(m.title)}
+          </div>
+          ${m.questions.map((q, qi) => renderQuestionCard(q, qi+1, p.id, m.id)).join('')}
+        </div>
+      `).join('')}
+
+      <button class="btn ghost" onclick="alert('Демо: добавить вопрос вручную')">
+        <svg width="14" height="14"><use href="#i-plus"/></svg> Добавить вопрос
+      </button>
+    </div>
+  `;
+}
+
+/* editor actions */
+function selectSlide(slideId) {
+  editorState.activeSlideId = slideId;
+  editorState.view = 'slide';
+  rerenderEditorContent();
+}
+function selectModuleQuestions(modId) {
+  editorState.activeModuleId = modId;
+  editorState.view = 'module-questions';
+  rerenderEditorContent();
+}
+function setEditorView(v) {
+  editorState.view = v;
+  rerenderEditorContent();
+}
+function rerenderEditorContent() {
+  const id = currentPath().split('/')[2];
+  const p = state.projects.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('ed-content').innerHTML = editorState.view === 'test' ? renderTestEditor(p) : renderSlideEditor(p);
+  // update tree active state
+  document.querySelectorAll('.tree-slide').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.editor-tab').forEach(el => el.classList.toggle('active', (el.textContent.includes('Тест') && editorState.view==='test') || (el.textContent.includes('Курс') && editorState.view!=='test')));
+  document.querySelectorAll('.tree-test-link').forEach(el => el.classList.toggle('active', editorState.view==='test'));
+}
+function onTitleChange(pid, val) {
+  const p = state.projects.find(x => x.id === pid);
+  if (p) { p.content.title = val; p.title = val; p.updatedAt = new Date().toISOString(); saveState(); }
+}
+function updateSlide(pid, sid, field, val) {
+  const p = state.projects.find(x => x.id === pid);
+  const found = findSlide(p, sid);
+  if (found) { found.slide[field] = val; p.updatedAt = new Date().toISOString(); saveState(); }
+}
+function regenerateSlide(sid) {
+  alert('Демо: AI регенерирует слайд за ~10 секунд. В реальном продукте — отдельный API-вызов с тем же контекстом.');
+}
+function addSlide(pid, mid) {
+  const p = state.projects.find(x => x.id === pid);
+  const m = p.content.modules.find(x => x.id === mid);
+  const newSlide = { id: 's_' + Date.now(), title: 'Новый слайд', content: '<p>Введите текст слайда...</p>' };
+  m.slides.push(newSlide);
+  editorState.activeSlideId = newSlide.id;
+  editorState.view = 'slide';
+  saveState();
+  const id = currentPath().split('/')[2];
+  document.getElementById('app').innerHTML = renderEditor(p);
+  attachEditorListeners(id);
+}
+function addModule(pid) {
+  const p = state.projects.find(x => x.id === pid);
+  p.content.modules.push({
+    id: 'm_' + Date.now(),
+    title: 'Новый модуль',
+    objective: 'Цель модуля...',
+    slides: [{ id: 's_' + Date.now(), title: 'Слайд 1', content: '<p>Введите текст...</p>' }],
+    questions: []
+  });
+  saveState();
+  const id = currentPath().split('/')[2];
+  document.getElementById('app').innerHTML = renderEditor(p);
+  attachEditorListeners(id);
+}
+function deleteSlide(pid, sid) {
+  if (!confirm('Удалить слайд?')) return;
+  const p = state.projects.find(x => x.id === pid);
+  for (const m of p.content.modules) {
+    const idx = m.slides.findIndex(s => s.id === sid);
+    if (idx > -1) {
+      m.slides.splice(idx, 1);
+      editorState.activeSlideId = m.slides[0]?.id || p.content.modules[0].slides[0]?.id;
+      saveState();
+      const id = currentPath().split('/')[2];
+      document.getElementById('app').innerHTML = renderEditor(p);
+      attachEditorListeners(id);
+      return;
+    }
+  }
+}
+function updateQuestion(pid, qid, field, val) {
+  const p = state.projects.find(x => x.id === pid);
+  for (const m of p.content.modules) {
+    const q = m.questions.find(x => x.id === qid);
+    if (q) { q[field] = val; saveState(); return; }
+  }
+}
+function updateOption(pid, qid, idx, val) {
+  const p = state.projects.find(x => x.id === pid);
+  for (const m of p.content.modules) {
+    const q = m.questions.find(x => x.id === qid);
+    if (q) { q.options[idx] = val; saveState(); return; }
+  }
+}
+function setCorrect(pid, qid, idx) {
+  const p = state.projects.find(x => x.id === pid);
+  for (const m of p.content.modules) {
+    const q = m.questions.find(x => x.id === qid);
+    if (q) {
+      q.correct = idx;
+      saveState();
+      rerenderEditorContent();
+      return;
+    }
+  }
+}
+function updatePassScore(pid, val) {
+  const p = state.projects.find(x => x.id === pid);
+  p.content.passScore = parseInt(val);
+  saveState();
+}
+function doRich(cmd, val) {
+  document.execCommand(cmd, false, val || null);
+}
+function attachEditorListeners(id) {
+  // placeholder for future event delegation
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODALS — Preview & Export
+═══════════════════════════════════════════════════════════ */
+function openModal(html) {
+  document.getElementById('modal-root').innerHTML = html;
+}
+function closeModal() {
+  document.getElementById('modal-root').innerHTML = '';
+}
+
+function openSlidePreview(pid, sid) {
+  const p = state.projects.find(x => x.id === pid);
+  sid = sid || editorState.activeSlideId;
+  const found = findSlide(p, sid);
+  if (!found) return;
+  const { module: m, slide: s } = found;
+  const totalSlides = p.content.modules.reduce((a,mm) => a + mm.slides.length, 0);
+  const allSlides = [];
+  p.content.modules.forEach(mm => mm.slides.forEach(ss => allSlides.push({ slide: ss, module: mm })));
+  const currentIdx = allSlides.findIndex(x => x.slide.id === sid);
+  openModal(`
+    <div class="modal-backdrop" onclick="if(event.target===this)closeModal()">
+      <div class="modal large">
+        <div class="modal-head">
+          <h3>Превью слайда · как увидит сотрудник в LMS</h3>
+          <button class="modal-close" onclick="closeModal()"><svg width="20" height="20"><use href="#i-x"/></svg></button>
+        </div>
+        <div class="modal-body">
+          <div class="preview-slide">
+            <h1>${escapeHtml(s.title)}</h1>
+            <div class="preview-slide-content">${s.content}</div>
+            <div class="preview-slide-footer">${escapeHtml(m.title)} · Слайд ${currentIdx+1} из ${totalSlides}</div>
+          </div>
+          <div class="preview-nav">
+            <button class="btn ghost sm" ${currentIdx===0?'disabled':''} onclick="openSlidePreview('${pid}','${allSlides[Math.max(0,currentIdx-1)]?.slide.id}')">
+              <svg width="14" height="14"><use href="#i-arrow-left"/></svg> Предыдущий
+            </button>
+            <span style="font-size:12px;color:var(--muted)">${currentIdx+1} / ${totalSlides}</span>
+            <button class="btn sm" ${currentIdx===totalSlides-1?'disabled':''} onclick="openSlidePreview('${pid}','${allSlides[Math.min(totalSlides-1,currentIdx+1)]?.slide.id}')">
+              Следующий <svg width="14" height="14"><use href="#i-arrow-right"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button class="btn ghost" onclick="closeModal()">Закрыть</button>
+        </div>
+      </div>
+    </div>
+  `);
+}
+
+function openExport(pid) {
+  const p = state.projects.find(x => x.id === pid);
+  const modulesCount = p.content.modules.length;
+  const slidesCount = p.content.modules.reduce((a,m) => a + m.slides.length, 0);
+  const questionsCount = countQuestions(p.content);
+  openModal(`
+    <div class="modal-backdrop" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <div class="modal-head">
+          <h3>Экспорт курса</h3>
+          <button class="modal-close" onclick="closeModal()"><svg width="20" height="20"><use href="#i-x"/></svg></button>
+        </div>
+        <div class="modal-body">
+          <p style="font-size:13px;color:var(--muted);margin-bottom:18px">Курс <b style="color:var(--text)">${escapeHtml(p.content.title)}</b> · ${modulesCount} модулей · ${slidesCount} слайдов · ${questionsCount} вопросов</p>
+
+          <div class="export-options">
+            <div class="export-opt" onclick="doExport('scorm','${pid}')">
+              <div class="export-opt-icon">📦</div>
+              <h4>SCORM 1.2</h4>
+              <p>ZIP-архив для загрузки в LMS компании</p>
+              <div class="file-info">course_${pid}.zip · ~2.4 МБ</div>
+            </div>
+            <div class="export-opt" onclick="doExport('xlsx','${pid}')">
+              <div class="export-opt-icon">📊</div>
+              <h4>Тест в XLSX</h4>
+              <p>Таблица с вопросами и ответами для архива</p>
+              <div class="file-info">test_${pid}.xlsx · ~24 КБ</div>
+            </div>
+          </div>
+
+          <div class="lms-check-box">
+            <b>Проверено в LMS:</b><br>
+            Пакет SCORM 1.2 загружается без ошибок в:
+            <div class="lms-icons">
+              <span>Moodle 4.x</span><span>iSpring Learn</span><span>Эквио</span><span>WebSoft HCM</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button class="btn ghost" onclick="closeModal()">Закрыть</button>
+        </div>
+      </div>
+    </div>
+  `);
+}
+
+function doExport(format, pid) {
+  const root = document.getElementById('modal-root');
+  root.innerHTML = `
+    <div class="modal-backdrop">
+      <div class="modal">
+        <div class="modal-body" style="text-align:center;padding:48px 32px">
+          <div class="gen-spinner" style="margin:0 auto 20px"></div>
+          <h3 style="font-family:'Playfair Display',serif;font-size:20px;font-weight:800;margin-bottom:8px">Собираем ${format === 'scorm' ? 'SCORM 1.2 пакет' : 'XLSX-таблицу'}...</h3>
+          <p style="font-size:13px;color:var(--muted)">Это займёт около 20–30 секунд</p>
+        </div>
+      </div>
+    </div>
+  `;
+  setTimeout(() => {
+    const p = state.projects.find(x => x.id === pid);
+    if (p) { p.status = 'exported'; p.updatedAt = new Date().toISOString(); saveState(); }
+    root.innerHTML = `
+      <div class="modal-backdrop" onclick="if(event.target===this)closeModal()">
+        <div class="modal">
+          <div class="modal-body" style="text-align:center;padding:48px 32px">
+            <div style="width:64px;height:64px;background:var(--accent-lt);border:2px solid var(--accent-md);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px">
+              <svg width="32" height="32" style="color:var(--accent)"><use href="#i-check"/></svg>
+            </div>
+            <h3 style="font-family:'Playfair Display',serif;font-size:22px;font-weight:800;margin-bottom:8px">Готово!</h3>
+            <p style="font-size:13.5px;color:var(--muted);margin-bottom:24px">${format === 'scorm' ? 'SCORM 1.2 пакет' : 'XLSX-файл'} собран и сохранён в загрузки</p>
+            <div style="background:var(--surface);border-radius:10px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);margin-bottom:20px">
+              ${format==='scorm' ? `course_${pid}.zip` : `test_${pid}.xlsx`}
+            </div>
+            <p style="font-size:12px;color:var(--muted2);margin-bottom:18px">Загрузите этот файл в вашу LMS — курс сразу станет доступен сотрудникам.</p>
+            <button class="btn" onclick="closeModal(); render();">Готово</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }, 2200);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════════════════════ */
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[m]));
+}
+function escapeAttr(s) { return escapeHtml(s); }
+function pluralize(n, one, few, many) {
+  const m10 = n % 10, m100 = n % 100;
+  if (m10 === 1 && m100 !== 11) return one;
+  if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few;
+  return many;
+}
+function formatRelative(iso) {
+  const d = new Date(iso);
+  const diff = (Date.now() - d.getTime()) / 1000;
+  if (diff < 60) return 'только что';
+  if (diff < 3600) { const m = Math.round(diff/60); return `${m} ${pluralize(m,'минуту','минуты','минут')} назад`; }
+  if (diff < 86400) { const h = Math.round(diff/3600); return `${h} ${pluralize(h,'час','часа','часов')} назад`; }
+  const days = Math.floor(diff/86400);
+  if (days < 7) return `${days} ${pluralize(days,'день','дня','дней')} назад`;
+  return d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
+}
+function countQuestions(c) {
+  return c.modules.reduce((a,m) => a + m.questions.length, 0);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   START
+═══════════════════════════════════════════════════════════ */
+if (!location.hash) {
+  navigate(state.auth ? '/projects' : '/login');
+} else {
+  render();
+}
+</script>
+</body>
+</html>

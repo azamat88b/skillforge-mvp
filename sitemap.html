@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillForge — Карта системы (MVP)</title>
+<meta name="description" content="Карта экранов и пользовательских потоков продукта SkillForge MVP.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231A6B4A'/%3E%3Cpath d='M16 6.5 L21.5 16.5 L17.5 14.8 L17.5 19 L14.5 19 L14.5 14.8 L10.5 16.5 Z' fill='%23fff'/%3E%3Crect x='9' y='21' width='14' height='2.2' rx='1' fill='%2386EFBF'/%3E%3Crect x='12.5' y='23.2' width='7' height='2.6' rx='0.5' fill='%2386EFBF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Epilogue:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #F7F5F0;
+  --white:     #FFFFFF;
+  --surface:   #EFEDE8;
+  --surface2:  #E8E5DF;
+  --border:    #DDD9D0;
+  --text:      #1A1814;
+  --muted:     #6B6760;
+  --muted2:    #9A9590;
+  --accent:    #1A6B4A;
+  --accent-lt: #EAF4EE;
+  --accent-md: #C6E8D4;
+  --accent-dk: #145438;
+  --amber:     #B85A00;
+  --amber-lt:  #FEF3E8;
+  --blue:      #2952B8;
+  --blue-lt:   #EAF0FE;
+  --red:       #C0392B;
+  --red-lt:    #FDECEA;
+  --purple:    #6B3FA0;
+  --purple-lt: #F1EAFA;
+  --ink:       #1A1814;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Epilogue', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+
+/* ── HEADER ── */
+.site-header {
+  border-bottom: 1px solid var(--border);
+  background: var(--white);
+  padding: 28px 40px;
+  position: sticky; top: 0; z-index: 50;
+  backdrop-filter: blur(8px);
+  background: rgba(255,255,255,0.92);
+}
+.site-header-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px;
+}
+.brand-logo {
+  display: inline-flex; align-items: center; gap: 10px;
+  text-decoration: none;
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+.brand-logo .mark {
+  width: 30px; height: 30px;
+  display: block;
+  border-radius: 7px;
+  box-shadow: 0 2px 8px rgba(26,107,74,0.25);
+}
+.brand-logo em { font-style: italic; color: var(--accent); font-weight: 800; }
+
+.header-meta {
+  display: flex; align-items: center; gap: 20px;
+}
+.header-meta .doc-tag {
+  font-size: 11px; font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-lt);
+  padding: 5px 12px; border-radius: 20px;
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.header-meta .doc-ver { font-size: 13px; color: var(--muted2); }
+
+/* ── HERO ── */
+.intro {
+  padding: 80px 0 60px;
+}
+.intro-kicker {
+  font-size: 11px; font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase; letter-spacing: 0.15em;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.intro-kicker::before { content: ''; width: 18px; height: 1.5px; background: var(--accent); display: block; }
+
+.intro h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(34px, 4vw, 50px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 18px;
+  max-width: 760px;
+}
+.intro h1 em { color: var(--accent); font-style: italic; }
+.intro p {
+  font-size: 17px;
+  color: var(--muted);
+  max-width: 640px;
+  line-height: 1.65;
+}
+
+/* ── SUMMARY STRIP ── */
+.summary-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-top: 40px;
+}
+.summary-cell {
+  background: var(--white);
+  padding: 22px 24px;
+}
+.summary-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px; font-weight: 800;
+  color: var(--ink); line-height: 1;
+}
+.summary-val em { font-style: normal; color: var(--accent); }
+.summary-lbl { font-size: 12px; color: var(--muted2); margin-top: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* ── LEGEND ── */
+.legend {
+  display: flex; flex-wrap: wrap; gap: 12px;
+  margin: 60px 0 40px;
+}
+.legend-item {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  font-size: 13px; font-weight: 500;
+  color: var(--muted);
+}
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.legend-dot.public  { background: var(--blue); }
+.legend-dot.auth    { background: var(--purple); }
+.legend-dot.app     { background: var(--accent); }
+.legend-dot.system  { background: var(--amber); }
+
+/* ── FLOW DIAGRAM ── */
+.flow-section { padding-bottom: 80px; }
+
+.zone {
+  margin-bottom: 56px;
+}
+.zone-header {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 24px;
+}
+.zone-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; font-weight: 800;
+  color: var(--white);
+}
+.zone-num.public { background: var(--blue); }
+.zone-num.auth   { background: var(--purple); }
+.zone-num.app    { background: var(--accent); }
+.zone-num.system { background: var(--amber); }
+
+.zone-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px; font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.zone-sub {
+  font-size: 14px; color: var(--muted);
+  margin-top: 3px;
+}
+
+/* ── PAGE CARDS ── */
+.pages-grid {
+  display: grid;
+  gap: 20px;
+}
+.pages-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.pages-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.pages-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+.pages-grid.cols-5 { grid-template-columns: repeat(5, 1fr); }
+
+.page-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px;
+  position: relative;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  display: flex; flex-direction: column;
+}
+.page-card:hover {
+  border-color: var(--accent-md);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(26,24,20,0.06);
+}
+.page-card.public::before  { background: var(--blue); }
+.page-card.auth::before    { background: var(--purple); }
+.page-card.app::before     { background: var(--accent); }
+.page-card.system::before  { background: var(--amber); }
+.page-card::before {
+  content: '';
+  position: absolute;
+  top: 22px; left: 0;
+  width: 4px; height: 22px;
+  border-radius: 0 3px 3px 0;
+}
+
+.page-id {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 500;
+  color: var(--muted2);
+  margin-bottom: 4px;
+  letter-spacing: 0.04em;
+}
+.page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+  line-height: 1.25;
+}
+.page-route {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  color: var(--accent);
+  background: var(--accent-lt);
+  padding: 3px 8px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-bottom: 12px;
+  word-break: break-all;
+}
+.page-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+  margin-bottom: 14px;
+}
+
+.page-feats {
+  list-style: none;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+}
+.page-feats li {
+  font-size: 12px;
+  color: var(--text);
+  padding: 3px 0 3px 16px;
+  position: relative;
+  line-height: 1.5;
+}
+.page-feats li::before {
+  content: '';
+  position: absolute;
+  left: 2px; top: 11px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent-md);
+}
+
+.page-fr {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted2);
+  background: var(--surface);
+  padding: 3px 7px;
+  border-radius: 4px;
+}
+
+/* ── FLOW ARROW ── */
+.flow-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) auto repeat(1, 1fr);
+  gap: 12px;
+  align-items: stretch;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+/* ── FLOW SECTION (visual user journey) ── */
+.journey {
+  background: var(--ink);
+  color: #fff;
+  padding: 80px 0;
+  margin: 80px 0;
+  position: relative; overflow: hidden;
+}
+.journey::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(26,107,74,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.journey .intro-kicker { color: #86EFBF; }
+.journey .intro-kicker::before { background: #86EFBF; }
+.journey h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 14px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.journey h2 em { color: #86EFBF; font-style: italic; }
+.journey > .container > p {
+  color: rgba(255,255,255,0.55);
+  font-size: 16px;
+  max-width: 580px;
+  margin-bottom: 48px;
+}
+
+.journey-flow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0;
+  align-items: stretch;
+  position: relative;
+}
+.flow-node {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 16px 14px;
+  text-align: center;
+  position: relative;
+}
+.flow-node-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px;
+  background: rgba(134,239,191,0.15);
+  color: #86EFBF;
+  border-radius: 50%;
+  font-family: 'Playfair Display', serif;
+  font-size: 12px; font-weight: 800;
+  margin-bottom: 10px;
+}
+.flow-node-title {
+  font-size: 12.5px; font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.flow-node-route {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: #86EFBF;
+  word-break: break-all;
+}
+.flow-arrow-sep {
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(134,239,191,0.4);
+  font-size: 18px;
+}
+
+/* ── TABLE OF STATES ── */
+.states-table {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.state-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 1.4fr;
+  gap: 24px;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
+}
+.state-row:last-child { border-bottom: none; }
+.state-row.head {
+  background: var(--surface);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted2);
+  font-weight: 700;
+}
+.state-name {
+  font-weight: 600;
+  color: var(--text);
+  display: flex; align-items: center; gap: 8px;
+}
+.state-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.state-dot.loading { background: var(--blue); }
+.state-dot.error   { background: var(--red); }
+.state-dot.empty   { background: var(--muted2); }
+.state-dot.success { background: var(--accent); }
+.state-dot.warn    { background: var(--amber); }
+.state-where { color: var(--muted); }
+.state-desc { color: var(--text); }
+
+/* ── ROLES SECTION ── */
+.roles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.role-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 24px;
+}
+.role-icon {
+  width: 44px; height: 44px;
+  background: var(--accent-lt);
+  border: 1px solid var(--accent-md);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+.role-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.role-card .role-meta {
+  font-size: 11px;
+  color: var(--muted2);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.role-card p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+.role-pages {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.role-pages span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 3px 7px;
+  border-radius: 4px;
+}
+
+/* ── SECTION TITLE ── */
+.sec-title {
+  display: flex; align-items: baseline; gap: 16px;
+  margin-bottom: 8px;
+}
+.sec-title h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px; font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.sec-title .sec-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 600;
+}
+.sec-sub {
+  font-size: 14px; color: var(--muted);
+  margin-bottom: 36px; max-width: 640px;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--ink);
+  padding: 32px 40px;
+  margin-top: 80px;
+}
+.footer-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
+.footer-inner .brand-logo { color: #fff; font-size: 16px; }
+.footer-inner .brand-logo em { color: #86EFBF; }
+.footer-info { font-size: 12px; color: rgba(255,255,255,0.4); }
+.footer-info a { color: rgba(255,255,255,0.7); text-decoration: none; }
+
+/* ── REVEAL ── */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s, transform 0.5s; }
+.reveal.in { opacity: 1; transform: none; }
+
+@media(max-width:1100px) {
+  .pages-grid.cols-4, .pages-grid.cols-5 { grid-template-columns: repeat(3, 1fr); }
+  .journey-flow { grid-template-columns: repeat(4, 1fr); }
+  .roles-grid { grid-template-columns: 1fr; }
+}
+@media(max-width:760px) {
+  .container, .site-header { padding-left: 20px; padding-right: 20px; }
+  .pages-grid.cols-3, .pages-grid.cols-4, .pages-grid.cols-5 { grid-template-columns: 1fr; }
+  .summary-strip { grid-template-columns: 1fr 1fr; }
+  .journey-flow { grid-template-columns: 1fr 1fr; }
+  .state-row { grid-template-columns: 1fr; gap: 6px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGO SVG SYMBOL -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="sf-mark" viewBox="0 0 32 32">
+    <rect width="32" height="32" rx="7" fill="#1A6B4A"/>
+    <path d="M16 6.5 L21.5 16.5 L17.5 14.8 L17.5 19 L14.5 19 L14.5 14.8 L10.5 16.5 Z" fill="#fff"/>
+    <rect x="9" y="21" width="14" height="2.2" rx="1" fill="#86EFBF"/>
+    <rect x="12.5" y="23.2" width="7" height="2.6" rx="0.5" fill="#86EFBF"/>
+  </symbol>
+</svg>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="index.html" class="brand-logo">
+      <svg class="mark" viewBox="0 0 32 32"><use href="#sf-mark"/></svg>
+      <span>Skill<em>Forge</em></span>
+    </a>
+    <div class="header-meta">
+      <span class="doc-tag">Sitemap</span>
+      <span class="doc-ver">MVP v0.1 · Май 2026</span>
+    </div>
+  </div>
+</header>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="container">
+    <div class="intro-kicker reveal">Карта системы</div>
+    <h1 class="reveal">Все экраны и потоки <em>MVP</em> на одной странице</h1>
+    <p class="reveal">Структура продукта: публичные страницы, аутентификация, основное приложение, системные состояния. Каждая карточка — отдельный экран с маршрутом, описанием и ключевыми элементами интерфейса.</p>
+
+    <div class="summary-strip reveal">
+      <div class="summary-cell">
+        <div class="summary-val"><em>16</em></div>
+        <div class="summary-lbl">Экранов в MVP</div>
+      </div>
+      <div class="summary-cell">
+        <div class="summary-val"><em>4</em></div>
+        <div class="summary-lbl">Функциональные зоны</div>
+      </div>
+      <div class="summary-cell">
+        <div class="summary-val"><em>9</em></div>
+        <div class="summary-lbl">FR-требований</div>
+      </div>
+      <div class="summary-cell">
+        <div class="summary-val"><em>7</em></div>
+        <div class="summary-lbl">Шагов основного флоу</div>
+      </div>
+    </div>
+
+    <div class="legend reveal">
+      <div class="legend-item"><span class="legend-dot public"></span> Публичные</div>
+      <div class="legend-item"><span class="legend-dot auth"></span> Аутентификация</div>
+      <div class="legend-item"><span class="legend-dot app"></span> Приложение</div>
+      <div class="legend-item"><span class="legend-dot system"></span> Системные состояния</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ JOURNEY ═══════════ -->
+<section class="journey">
+  <div class="container">
+    <div class="intro-kicker reveal">Основной пользовательский поток</div>
+    <h2 class="reveal">От загрузки документа до <em>SCORM-экспорта</em></h2>
+    <p class="reveal">7 шагов методолога — от входа в систему до получения готового пакета для LMS. Среднее время прохождения — 4–6 часов вместо 40–120.</p>
+
+    <div class="journey-flow reveal">
+      <div class="flow-node">
+        <div class="flow-node-num">1</div>
+        <div class="flow-node-title">Вход в систему</div>
+        <div class="flow-node-route">/login</div>
+      </div>
+      <div class="flow-arrow-sep">→</div>
+      <div class="flow-node">
+        <div class="flow-node-num">2</div>
+        <div class="flow-node-title">Дашборд проектов</div>
+        <div class="flow-node-route">/projects</div>
+      </div>
+      <div class="flow-arrow-sep">→</div>
+      <div class="flow-node">
+        <div class="flow-node-num">3</div>
+        <div class="flow-node-title">Загрузка документа</div>
+        <div class="flow-node-route">/projects/new</div>
+      </div>
+      <div class="flow-arrow-sep">→</div>
+      <div class="flow-node">
+        <div class="flow-node-num">4</div>
+        <div class="flow-node-title">Параметры курса</div>
+        <div class="flow-node-route">/projects/new/params</div>
+      </div>
+    </div>
+    <div class="journey-flow reveal" style="margin-top:16px">
+      <div class="flow-node">
+        <div class="flow-node-num">5</div>
+        <div class="flow-node-title">Генерация AI</div>
+        <div class="flow-node-route">/projects/[id]/generating</div>
+      </div>
+      <div class="flow-arrow-sep">→</div>
+      <div class="flow-node">
+        <div class="flow-node-num">6</div>
+        <div class="flow-node-title">Редактор курса</div>
+        <div class="flow-node-route">/projects/[id]/edit</div>
+      </div>
+      <div class="flow-arrow-sep">→</div>
+      <div class="flow-node">
+        <div class="flow-node-num">7</div>
+        <div class="flow-node-title">Экспорт SCORM/XLSX</div>
+        <div class="flow-node-route">/projects/[id]/export</div>
+      </div>
+      <div class="flow-arrow-sep"></div>
+      <div class="flow-node" style="background:rgba(134,239,191,0.1);border-color:rgba(134,239,191,0.3)">
+        <div class="flow-node-num" style="background:#86EFBF;color:var(--ink)">✓</div>
+        <div class="flow-node-title">Готово к LMS</div>
+        <div class="flow-node-route">Moodle · iSpring · Эквио</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ ZONE 1 — PUBLIC ═══════════ -->
+<section class="flow-section">
+  <div class="container">
+
+    <div class="zone">
+      <div class="zone-header">
+        <div class="zone-num public">01</div>
+        <div>
+          <div class="zone-title">Публичные страницы</div>
+          <div class="zone-sub">Доступны без авторизации · точка входа на продукт</div>
+        </div>
+      </div>
+
+      <div class="pages-grid cols-3">
+        <div class="page-card public">
+          <div class="page-id">P-01</div>
+          <div class="page-title">Лендинг</div>
+          <span class="page-route">/</span>
+          <div class="page-desc">Маркетинговая страница продукта. Конвертация посетителя в лида: демо или регистрация.</div>
+          <ul class="page-feats">
+            <li>Hero с CTA «Запросить демо»</li>
+            <li>Pain · How it works · Features</li>
+            <li>ROI-калькулятор</li>
+            <li>Use cases · LMS-совместимость</li>
+            <li>Форма заявки на демо</li>
+          </ul>
+          <span class="page-fr">BRD §13</span>
+        </div>
+
+        <div class="page-card public">
+          <div class="page-id">P-02</div>
+          <div class="page-title">Политика конфиденциальности</div>
+          <span class="page-route">/privacy</span>
+          <div class="page-desc">Правовой документ. Обработка персональных данных согласно закону РК «О персональных данных».</div>
+          <ul class="page-feats">
+            <li>Юридический текст</li>
+            <li>Контакты ответственного лица</li>
+          </ul>
+        </div>
+
+        <div class="page-card public">
+          <div class="page-id">P-03</div>
+          <div class="page-title">Условия использования</div>
+          <span class="page-route">/terms</span>
+          <div class="page-desc">Публичная оферта, лицензионное соглашение пользователя.</div>
+          <ul class="page-feats">
+            <li>Юридический текст</li>
+            <li>Версия и дата</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ ZONE 2 — AUTH ═══════════ -->
+    <div class="zone">
+      <div class="zone-header">
+        <div class="zone-num auth">02</div>
+        <div>
+          <div class="zone-title">Аутентификация</div>
+          <div class="zone-sub">Email + пароль · JWT-сессия 7 дней · bcrypt-хеши</div>
+        </div>
+      </div>
+
+      <div class="pages-grid cols-4">
+        <div class="page-card auth">
+          <div class="page-id">A-01</div>
+          <div class="page-title">Регистрация</div>
+          <span class="page-route">/register</span>
+          <div class="page-desc">Создание аккаунта новым пользователем.</div>
+          <ul class="page-feats">
+            <li>Имя · Email · Пароль</li>
+            <li>Согласие с офертой</li>
+            <li>Подтверждение email (опц.)</li>
+          </ul>
+          <span class="page-fr">FR-09</span>
+        </div>
+
+        <div class="page-card auth">
+          <div class="page-id">A-02</div>
+          <div class="page-title">Вход</div>
+          <span class="page-route">/login</span>
+          <div class="page-desc">Авторизация существующего пользователя.</div>
+          <ul class="page-feats">
+            <li>Email · Пароль</li>
+            <li>Ссылка «Забыли пароль?»</li>
+            <li>Ссылка на регистрацию</li>
+          </ul>
+          <span class="page-fr">FR-09</span>
+        </div>
+
+        <div class="page-card auth">
+          <div class="page-id">A-03</div>
+          <div class="page-title">Восстановление пароля</div>
+          <span class="page-route">/forgot-password</span>
+          <div class="page-desc">Запрос ссылки для сброса пароля на email.</div>
+          <ul class="page-feats">
+            <li>Поле email</li>
+            <li>Подтверждение отправки</li>
+          </ul>
+          <span class="page-fr">FR-09</span>
+        </div>
+
+        <div class="page-card auth">
+          <div class="page-id">A-04</div>
+          <div class="page-title">Установка нового пароля</div>
+          <span class="page-route">/reset-password?token=</span>
+          <div class="page-desc">Ввод нового пароля по ссылке из email.</div>
+          <ul class="page-feats">
+            <li>Новый пароль · Повтор</li>
+            <li>Валидация токена</li>
+            <li>Редирект на /login</li>
+          </ul>
+          <span class="page-fr">FR-09</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ ZONE 3 — APP ═══════════ -->
+    <div class="zone">
+      <div class="zone-header">
+        <div class="zone-num app">03</div>
+        <div>
+          <div class="zone-title">Приложение — рабочее пространство методолога</div>
+          <div class="zone-sub">Все экраны после входа · 9 функциональных требований (FR-01 ... FR-08)</div>
+        </div>
+      </div>
+
+      <!-- Dashboard -->
+      <div class="pages-grid cols-2" style="margin-bottom:20px">
+        <div class="page-card app">
+          <div class="page-id">D-01</div>
+          <div class="page-title">Дашборд проектов</div>
+          <span class="page-route">/projects</span>
+          <div class="page-desc">Главный экран после входа. Список всех проектов пользователя с возможностью открыть, экспортировать или удалить.</div>
+          <ul class="page-feats">
+            <li>Сетка карточек проектов</li>
+            <li>Поиск по названию</li>
+            <li>Статусы: Черновик / Экспортирован / Ошибка</li>
+            <li>Кнопка «Новый курс»</li>
+            <li>Empty state — для первого входа</li>
+          </ul>
+          <span class="page-fr">FR-08</span>
+        </div>
+
+        <div class="page-card app">
+          <div class="page-id">D-02</div>
+          <div class="page-title">Аккаунт и настройки</div>
+          <span class="page-route">/account</span>
+          <div class="page-desc">Личный кабинет: профиль, смена пароля, выход. Минимум для MVP.</div>
+          <ul class="page-feats">
+            <li>Имя · Email (только просмотр)</li>
+            <li>Смена пароля</li>
+            <li>Выход из системы</li>
+            <li>Удаление аккаунта (опционально)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Wizard: New course -->
+      <div class="pages-grid cols-3" style="margin-bottom:20px">
+        <div class="page-card app">
+          <div class="page-id">W-01</div>
+          <div class="page-title">Загрузка документа</div>
+          <span class="page-route">/projects/new</span>
+          <div class="page-desc">Шаг 1 мастера создания курса. Загрузка исходного файла с регламентом или инструкцией.</div>
+          <ul class="page-feats">
+            <li>Drag-and-drop зона</li>
+            <li>File picker (PDF, DOCX, PPTX, TXT)</li>
+            <li>Лимит 50 МБ</li>
+            <li>Прогресс парсинга документа</li>
+            <li>Сообщение об ошибке (сканированный PDF и т.п.)</li>
+          </ul>
+          <span class="page-fr">FR-01</span>
+        </div>
+
+        <div class="page-card app">
+          <div class="page-id">W-02</div>
+          <div class="page-title">Параметры генерации</div>
+          <span class="page-route">/projects/new/params</span>
+          <div class="page-desc">Шаг 2 мастера. Настройка целевой аудитории, сложности и объёма курса перед запуском AI.</div>
+          <ul class="page-feats">
+            <li>Целевая аудитория (текст)</li>
+            <li>Уровень сложности (3 опции)</li>
+            <li>Количество модулей (2–10)</li>
+            <li>Вопросов в итоговом тесте (5–20)</li>
+            <li>Кнопка «Сгенерировать курс»</li>
+          </ul>
+          <span class="page-fr">FR-02</span>
+        </div>
+
+        <div class="page-card app">
+          <div class="page-id">W-03</div>
+          <div class="page-title">Прогресс генерации</div>
+          <span class="page-route">/projects/[id]/generating</span>
+          <div class="page-desc">Шаг 3. Экран ожидания пока AI создаёт черновик. Видна пошаговая активность: «Модуль 1 готов...».</div>
+          <ul class="page-feats">
+            <li>Прогресс-бар по модулям</li>
+            <li>Анимация активности</li>
+            <li>Лог шагов AI (анализ → контент → тест)</li>
+            <li>Кнопка «Отменить» (опционально)</li>
+            <li>Авто-редирект в редактор при готовности</li>
+          </ul>
+          <span class="page-fr">FR-03</span>
+        </div>
+      </div>
+
+      <!-- Editor & sub-views -->
+      <div class="pages-grid cols-4">
+        <div class="page-card app">
+          <div class="page-id">E-01</div>
+          <div class="page-title">Редактор курса</div>
+          <span class="page-route">/projects/[id]/edit</span>
+          <div class="page-desc">Главный рабочий экран. Дерево слева, rich-text редактор справа, тулбар сверху.</div>
+          <ul class="page-feats">
+            <li>Дерево модулей и слайдов</li>
+            <li>Drag-and-drop перестановка</li>
+            <li>Rich-text редактор (Tiptap)</li>
+            <li>Регенерация блока/модуля</li>
+            <li>Добавить/удалить элемент</li>
+            <li>Автосохранение каждые 30 сек</li>
+          </ul>
+          <span class="page-fr">FR-04</span>
+        </div>
+
+        <div class="page-card app">
+          <div class="page-id">E-02</div>
+          <div class="page-title">Редактор теста</div>
+          <span class="page-route">/projects/[id]/test</span>
+          <div class="page-desc">Отдельная вкладка с итоговым тестом. Управление вопросами и проходным баллом.</div>
+          <ul class="page-feats">
+            <li>Список вопросов · перестановка</li>
+            <li>4 варианта + правильный</li>
+            <li>Регенерация вопроса</li>
+            <li>Добавить/удалить вопрос</li>
+            <li>Проходной балл (по умолчанию 70%)</li>
+          </ul>
+          <span class="page-fr">FR-05</span>
+        </div>
+
+        <div class="page-card app">
+          <div class="page-id">E-03</div>
+          <div class="page-title">Предпросмотр слайда</div>
+          <span class="page-route">модалка из E-01</span>
+          <div class="page-desc">Просмотр того, как слайд будет выглядеть в финальном SCORM-курсе внутри LMS.</div>
+          <ul class="page-feats">
+            <li>Точный рендер слайда</li>
+            <li>Навигация: пред./след.</li>
+            <li>Кнопка «Вернуться к правке»</li>
+          </ul>
+          <span class="page-fr">FR-04</span>
+        </div>
+
+        <div class="page-card app">
+          <div class="page-id">E-04</div>
+          <div class="page-title">Экспорт</div>
+          <span class="page-route">модалка из E-01</span>
+          <div class="page-desc">Сборка финальных артефактов: SCORM 1.2 ZIP для LMS и XLSX с тестом.</div>
+          <ul class="page-feats">
+            <li>Кнопка «Скачать SCORM 1.2»</li>
+            <li>Кнопка «Скачать тест XLSX»</li>
+            <li>Прогресс сборки (≤30 сек)</li>
+            <li>История экспортов</li>
+          </ul>
+          <span class="page-fr">FR-06 · FR-07</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ ZONE 4 — SYSTEM STATES ═══════════ -->
+    <div class="zone">
+      <div class="zone-header">
+        <div class="zone-num system">04</div>
+        <div>
+          <div class="zone-title">Системные состояния</div>
+          <div class="zone-sub">Универсальные паттерны — встречаются на нескольких экранах</div>
+        </div>
+      </div>
+
+      <div class="states-table">
+        <div class="state-row head">
+          <div>Состояние</div>
+          <div>Где встречается</div>
+          <div>Поведение</div>
+        </div>
+        <div class="state-row">
+          <div class="state-name"><span class="state-dot empty"></span>Empty state</div>
+          <div class="state-where">Дашборд (нет проектов)</div>
+          <div class="state-desc">Иллюстрация + текст «У вас пока нет курсов» + кнопка «Создать первый курс».</div>
+        </div>
+        <div class="state-row">
+          <div class="state-name"><span class="state-dot loading"></span>Loading</div>
+          <div class="state-where">Парсинг файла · генерация AI · сборка SCORM</div>
+          <div class="state-desc">Прогресс-бар с понятным шагом процесса. Дисейбл UI, чтобы пользователь не дёргал.</div>
+        </div>
+        <div class="state-row">
+          <div class="state-name"><span class="state-dot error"></span>Parse Error</div>
+          <div class="state-where">W-01 «Загрузка документа»</div>
+          <div class="state-desc">Сканированный PDF без OCR, неподдерживаемый формат, превышение 50 МБ — конкретное сообщение и кнопка «Загрузить другой».</div>
+        </div>
+        <div class="state-row">
+          <div class="state-name"><span class="state-dot error"></span>AI Error</div>
+          <div class="state-where">W-03 «Прогресс генерации»</div>
+          <div class="state-desc">Таймаут AI или сбой после 2 retry. Сохраняется частичный результат + кнопка «Попробовать снова».</div>
+        </div>
+        <div class="state-row">
+          <div class="state-name"><span class="state-dot error"></span>Export Error</div>
+          <div class="state-where">E-04 «Экспорт»</div>
+          <div class="state-desc">Сбой сборки SCORM ZIP. Лог ошибки + контакт поддержки.</div>
+        </div>
+        <div class="state-row">
+          <div class="state-name"><span class="state-dot warn"></span>Unsaved warning</div>
+          <div class="state-where">E-01 · E-02</div>
+          <div class="state-desc">Попытка уйти со страницы с несохранёнными правками — модальное предупреждение.</div>
+        </div>
+        <div class="state-row">
+          <div class="state-name"><span class="state-dot warn"></span>Large document</div>
+          <div class="state-where">W-01 «Загрузка документа»</div>
+          <div class="state-desc">Документ >200 страниц — предупреждение о возможном времени и предложение обработать частями.</div>
+        </div>
+        <div class="state-row">
+          <div class="state-name"><span class="state-dot success"></span>Export success</div>
+          <div class="state-where">E-04 «Экспорт»</div>
+          <div class="state-desc">SCORM/XLSX готов. Auto-скачивание + сообщение «Файл готов» + инструкция загрузки в LMS.</div>
+        </div>
+        <div class="state-row">
+          <div class="state-name"><span class="state-dot error"></span>404 / 500</div>
+          <div class="state-where">Любой неизвестный URL · сбой сервера</div>
+          <div class="state-desc">Системная страница ошибки с возвратом на дашборд и контактом поддержки.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ ROLES & PERSONAS ═══════════ -->
+    <div class="zone">
+      <div class="zone-header">
+        <div class="zone-num app">05</div>
+        <div>
+          <div class="zone-title">Роли пользователей в MVP</div>
+          <div class="zone-sub">В MVP — одна активная роль · мульти-роли запланированы в v1.0</div>
+        </div>
+      </div>
+
+      <div class="roles-grid">
+        <div class="role-card">
+          <div class="role-icon">👩‍🏫</div>
+          <h3>Методолог · T&amp;D</h3>
+          <div class="role-meta">Первичный пользователь · полный доступ в MVP</div>
+          <p>Создаёт курсы: загружает документы, настраивает параметры, редактирует черновик, экспортирует SCORM. В MVP — каждый методолог работает со своими проектами.</p>
+          <div class="role-pages">
+            <span>/projects</span>
+            <span>/projects/new</span>
+            <span>/projects/[id]/edit</span>
+            <span>/projects/[id]/test</span>
+            <span>/projects/[id]/export</span>
+            <span>/account</span>
+          </div>
+        </div>
+
+        <div class="role-card">
+          <div class="role-icon">🖥️</div>
+          <h3>IT-администратор LMS</h3>
+          <div class="role-meta">Вторичный пользователь · вне самой системы</div>
+          <p>Получает готовый SCORM ZIP от методолога и загружает в корпоративную LMS (Moodle, iSpring Learn, Эквио). Не работает в SkillForge напрямую — взаимодействует только с артефактом экспорта.</p>
+          <div class="role-pages">
+            <span>не входит в систему</span>
+          </div>
+        </div>
+
+        <div class="role-card">
+          <div class="role-icon">🔧</div>
+          <h3>Системный администратор</h3>
+          <div class="role-meta">On-premise развёртывание · DevOps</div>
+          <p>Разворачивает SkillForge через Docker Compose на сервере клиента. Не имеет UI в MVP — управление через переменные окружения и логи.</p>
+          <div class="role-pages">
+            <span>docker-compose.yml</span>
+            <span>.env</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ TECHNICAL MAP ═══════════ -->
+    <div class="zone">
+      <div class="zone-header">
+        <div class="zone-num system">06</div>
+        <div>
+          <div class="zone-title">Что НЕ входит в MVP</div>
+          <div class="zone-sub">Запланировано в roadmap · важно для понимания границ системы</div>
+        </div>
+      </div>
+
+      <div class="pages-grid cols-3">
+        <div class="page-card system">
+          <div class="page-id">v1.0</div>
+          <div class="page-title">Командный доступ</div>
+          <span class="page-route">3–6 мес.</span>
+          <div class="page-desc">Многопользовательские роли, права, общие проекты, организации.</div>
+        </div>
+        <div class="page-card system">
+          <div class="page-id">v1.0</div>
+          <div class="page-title">Казахский язык интерфейса</div>
+          <span class="page-route">3–6 мес.</span>
+          <div class="page-desc">Полная i18n-локализация UI. Архитектурно заложено в MVP.</div>
+        </div>
+        <div class="page-card system">
+          <div class="page-id">v1.0</div>
+          <div class="page-title">Брендированные шаблоны</div>
+          <span class="page-route">3–6 мес.</span>
+          <div class="page-desc">Кастомные шаблоны слайдов с логотипом и фирменными цветами клиента.</div>
+        </div>
+        <div class="page-card system">
+          <div class="page-id">v1.1</div>
+          <div class="page-title">AI-озвучка (TTS) · Видео</div>
+          <span class="page-route">6–9 мес.</span>
+          <div class="page-desc">Голосовая озвучка слайдов и встраивание видео-материалов.</div>
+        </div>
+        <div class="page-card system">
+          <div class="page-id">v1.1</div>
+          <div class="page-title">SCORM 2004 · xAPI</div>
+          <span class="page-route">6–9 мес.</span>
+          <div class="page-desc">Расширенные стандарты упаковки и трекинга.</div>
+        </div>
+        <div class="page-card system">
+          <div class="page-id">v1.2</div>
+          <div class="page-title">API-интеграция с LMS</div>
+          <span class="page-route">9–12 мес.</span>
+          <div class="page-desc">Автозагрузка курса в Moodle / iSpring по API, без ручной выгрузки SCORM ZIP.</div>
+        </div>
+        <div class="page-card system">
+          <div class="page-id">v2.0</div>
+          <div class="page-title">Встроенная мини-LMS</div>
+          <span class="page-route">12+ мес.</span>
+          <div class="page-desc">Назначение курсов сотрудникам, отслеживание прогресса, выдача сертификатов. SkillForge как полноценная платформа.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="brand-logo">
+      <svg class="mark" viewBox="0 0 32 32"><use href="#sf-mark"/></svg>
+      <span>Skill<em>Forge</em></span>
+    </a>
+    <div class="footer-info">
+      Sitemap MVP v0.1 · по <a href="BRD_AI_CourseGen_MVP.md">BRD</a> · © 2026 RNM KZ
+    </div>
+  </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+},{threshold:0.05,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
