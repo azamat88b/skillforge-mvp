@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SkillForge — Карта системы (MVP)</title>
-<meta name="description" content="Карта экранов и пользовательских потоков продукта SkillForge MVP.">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231A6B4A'/%3E%3Cpath d='M16 6.5 L21.5 16.5 L17.5 14.8 L17.5 19 L14.5 19 L14.5 14.8 L10.5 16.5 Z' fill='%23fff'/%3E%3Crect x='9' y='21' width='14' height='2.2' rx='1' fill='%2386EFBF'/%3E%3Crect x='12.5' y='23.2' width='7' height='2.6' rx='0.5' fill='%2386EFBF'/%3E%3C/svg%3E">
+<title>TalapLab — Карта системы (MVP)</title>
+<meta name="description" content="Карта экранов и пользовательских потоков продукта TalapLab MVP.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231A6B4A'/%3E%3Cpath d='M13 6 L13 13 L8.5 23 Q7.5 26 11 26 L21 26 Q24.5 26 23.5 23 L19 13 L19 6' fill='none' stroke='%23fff' stroke-width='1.8' stroke-linejoin='round'/%3E%3Crect x='12' y='5' width='8' height='2' rx='0.6' fill='%23fff'/%3E%3Cpath d='M10.5 20 Q14 18 16 19 Q19 20 21.5 20 L23 24 Q23 26 21 26 L11 26 Q9 26 9 24 Z' fill='%2386EFBF'/%3E%3Ccircle cx='14' cy='22.5' r='0.9' fill='%23fff'/%3E%3Ccircle cx='18' cy='23.5' r='0.7' fill='%23fff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Montserrat:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -545,11 +545,13 @@ footer {
 
 <!-- LOGO SVG SYMBOL -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="sf-mark" viewBox="0 0 32 32">
+  <symbol id="tl-mark" viewBox="0 0 32 32">
     <rect width="32" height="32" rx="7" fill="#1A6B4A"/>
-    <path d="M16 6.5 L21.5 16.5 L17.5 14.8 L17.5 19 L14.5 19 L14.5 14.8 L10.5 16.5 Z" fill="#fff"/>
-    <rect x="9" y="21" width="14" height="2.2" rx="1" fill="#86EFBF"/>
-    <rect x="12.5" y="23.2" width="7" height="2.6" rx="0.5" fill="#86EFBF"/>
+    <path d="M13 6 L13 13 L8.5 23 Q7.5 26 11 26 L21 26 Q24.5 26 23.5 23 L19 13 L19 6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/>
+    <rect x="12" y="5" width="8" height="2" rx="0.6" fill="#fff"/>
+    <path d="M10.5 20 Q14 18 16 19 Q19 20 21.5 20 L23 24 Q23 26 21 26 L11 26 Q9 26 9 24 Z" fill="#86EFBF"/>
+    <circle cx="14" cy="22.5" r="0.9" fill="#fff"/>
+    <circle cx="18" cy="23.5" r="0.7" fill="#fff"/>
   </symbol>
 </svg>
 
@@ -557,8 +559,8 @@ footer {
 <header class="site-header">
   <div class="site-header-inner">
     <a href="index.html" class="brand-logo">
-      <svg class="mark" viewBox="0 0 32 32"><use href="#sf-mark"/></svg>
-      <span>Skill<em>Forge</em></span>
+      <svg class="mark" viewBox="0 0 32 32"><use href="#tl-mark"/></svg>
+      <span>Talap<em>Lab</em></span>
     </a>
     <div class="header-meta">
       <span class="doc-tag">Sitemap</span>
@@ -1106,7 +1108,7 @@ footer {
           <div class="role-icon">🖥️</div>
           <h3>IT-администратор LMS</h3>
           <div class="role-meta">Вторичный пользователь · вне самой системы</div>
-          <p>Получает готовый SCORM ZIP от методолога и загружает в корпоративную LMS (Moodle, iSpring Learn, Эквио). Не работает в SkillForge напрямую — взаимодействует только с артефактом экспорта.</p>
+          <p>Получает готовый SCORM ZIP от методолога и загружает в корпоративную LMS (Moodle, iSpring Learn, Эквио). Не работает в TalapLab напрямую — взаимодействует только с артефактом экспорта.</p>
           <div class="role-pages">
             <span>не входит в систему</span>
           </div>
@@ -1116,7 +1118,7 @@ footer {
           <div class="role-icon">🔧</div>
           <h3>Системный администратор</h3>
           <div class="role-meta">On-premise развёртывание · DevOps</div>
-          <p>Разворачивает SkillForge через Docker Compose на сервере клиента. Не имеет UI в MVP — управление через переменные окружения и логи.</p>
+          <p>Разворачивает TalapLab через Docker Compose на сервере клиента. Не имеет UI в MVP — управление через переменные окружения и логи.</p>
           <div class="role-pages">
             <span>docker-compose.yml</span>
             <span>.env</span>
@@ -1176,7 +1178,7 @@ footer {
           <div class="page-id">v2.0</div>
           <div class="page-title">Встроенная мини-LMS</div>
           <span class="page-route">12+ мес.</span>
-          <div class="page-desc">Назначение курсов сотрудникам, отслеживание прогресса, выдача сертификатов. SkillForge как полноценная платформа.</div>
+          <div class="page-desc">Назначение курсов сотрудникам, отслеживание прогресса, выдача сертификатов. TalapLab как полноценная платформа.</div>
         </div>
       </div>
     </div>
@@ -1188,8 +1190,8 @@ footer {
 <footer>
   <div class="footer-inner">
     <a href="index.html" class="brand-logo">
-      <svg class="mark" viewBox="0 0 32 32"><use href="#sf-mark"/></svg>
-      <span>Skill<em>Forge</em></span>
+      <svg class="mark" viewBox="0 0 32 32"><use href="#tl-mark"/></svg>
+      <span>Talap<em>Lab</em></span>
     </a>
     <div class="footer-info">
       Sitemap MVP v0.1 · по <a href="BRD_AI_CourseGen_MVP.md">BRD</a> · © 2026 RNM KZ
