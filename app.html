@@ -1221,6 +1221,7 @@ input[type=range]::-webkit-slider-thumb {
 .role-pill.owner  { background: var(--accent-lt); color: var(--accent); }
 .role-pill.admin  { background: var(--blue-lt);   color: var(--blue); }
 .role-pill.author { background: var(--surface);   color: var(--muted); }
+.role-pill.member { background: var(--purple-lt); color: var(--purple); }
 
 .status-pill {
   display: inline-flex; align-items: center; gap: 5px;
@@ -1734,7 +1735,10 @@ const SEED_TEAM = [
   { id: 't3', name: 'Ержан Тулеуов', email: 'e.tuleuov@samruk-academy.kz', role: 'author', status: 'active', lastActive: '2026-05-20T17:18:00Z', coursesCount: 5 },
   { id: 't4', name: 'Динара Касенова', email: 'd.kasenova@samruk-academy.kz', role: 'author', status: 'invited', lastActive: null, coursesCount: 0 },
   { id: 't5', name: 'Марат Жакупов', email: 'm.zhakupov@samruk-academy.kz', role: 'author', status: 'active', lastActive: '2026-05-19T15:30:00Z', coursesCount: 3 },
-  { id: 't6', name: 'Айгуль Сатпаева', email: 'a.satpaeva@samruk-academy.kz', role: 'author', status: 'inactive', lastActive: '2026-04-12T11:05:00Z', coursesCount: 7 }
+  { id: 't6', name: 'Айгуль Сатпаева', email: 'a.satpaeva@samruk-academy.kz', role: 'author', status: 'inactive', lastActive: '2026-04-12T11:05:00Z', coursesCount: 7 },
+  { id: 't7', name: 'Бахытжан Омаров',    email: 'b.omarov@samruk-academy.kz',     role: 'member', status: 'active',  lastActive: '2026-05-21T07:30:00Z', coursesCount: 0 },
+  { id: 't8', name: 'Назгуль Жумабаева',  email: 'n.zhumabaeva@samruk-academy.kz', role: 'member', status: 'active',  lastActive: '2026-05-20T14:15:00Z', coursesCount: 0 },
+  { id: 't9', name: 'Олжас Бектуров',     email: 'o.bekturov@samruk-academy.kz',   role: 'member', status: 'invited', lastActive: null,                  coursesCount: 0 }
 ];
 
 const SEED_INTEGRATIONS = {
@@ -1791,7 +1795,7 @@ const PLAN_OPTIONS = [
   { id: 'enterprise', name: 'Enterprise', price: null, courses: -1, seats: -1, feats: ['Безлимитные курсы и пользователи', 'On-premise установка', 'Кастомные интеграции', 'SLA · персональный менеджер', 'Брендирование под клиента'] }
 ];
 
-const LS_KEY = 'skillforge_demo_state_v2';
+const LS_KEY = 'skillforge_demo_state_v3';
 
 let state = loadState();
 
@@ -2331,6 +2335,7 @@ registerRoute('/team', () => {
   const owners = team.filter(t => t.role === 'owner').length;
   const admins = team.filter(t => t.role === 'admin').length;
   const authors = team.filter(t => t.role === 'author').length;
+  const members = team.filter(t => t.role === 'member').length;
   const active = team.filter(t => t.status === 'active').length;
 
   return appShell('team', `
@@ -2340,7 +2345,7 @@ registerRoute('/team', () => {
           Команда
           <span class="page-header-role">${state.role.toUpperCase()}</span>
         </div>
-        <div class="page-sub">${team.length} ${pluralize(team.length,'участник','участника','участников')} · ${active} активны</div>
+        <div class="page-sub">${team.length} ${pluralize(team.length,'участник','участника','участников')} · ${active} активны · ${members} сотрудников</div>
       </div>
       <button class="btn" onclick="openInviteModal()">
         <svg width="16" height="16"><use href="#i-plus"/></svg>
@@ -2350,21 +2355,23 @@ registerRoute('/team', () => {
 
     <div class="stat-tiles">
       <div class="stat-tile">
-        <div class="lbl">Владельцы</div>
-        <div class="val">${owners}</div>
-      </div>
-      <div class="stat-tile">
-        <div class="lbl">Администраторы</div>
-        <div class="val">${admins}</div>
+        <div class="lbl">Администрация</div>
+        <div class="val">${owners + admins}</div>
+        <div class="sub">${owners} owner · ${admins} admin</div>
       </div>
       <div class="stat-tile">
         <div class="lbl">Авторы курсов</div>
         <div class="val">${authors}</div>
       </div>
       <div class="stat-tile">
+        <div class="lbl">Сотрудники</div>
+        <div class="val">${members}</div>
+        <div class="sub">проходят курсы</div>
+      </div>
+      <div class="stat-tile">
         <div class="lbl">Использовано мест</div>
         <div class="val"><em>${state.billing.seatsUsed}</em> / ${state.billing.seatsLimit}</div>
-        <div class="sub">по тарифу ${state.billing.planName}</div>
+        <div class="sub">только авторы и админы</div>
       </div>
     </div>
 
@@ -2378,6 +2385,7 @@ registerRoute('/team', () => {
         <option>Owner</option>
         <option>Admin</option>
         <option>Author</option>
+        <option>Member</option>
       </select>
       <select style="width:160px">
         <option>Все статусы</option>
@@ -2402,7 +2410,7 @@ registerRoute('/team', () => {
         <tbody>
           ${team.map(t => {
             const initials = t.name.split(' ').map(s=>s[0]).join('').slice(0,2).toUpperCase();
-            const roleLabels = { owner: 'Owner', admin: 'Admin', author: 'Author' };
+            const roleLabels = { owner: 'Owner', admin: 'Admin', author: 'Author', member: 'Member' };
             const statusLabels = { active: 'Активен', invited: 'Приглашён', inactive: 'Неактивен' };
             return `
               <tr>
@@ -2417,7 +2425,7 @@ registerRoute('/team', () => {
                 </td>
                 <td><span class="role-pill ${t.role}">${roleLabels[t.role]}</span></td>
                 <td><span class="status-pill ${t.status}"><span class="dot"></span>${statusLabels[t.status]}</span></td>
-                <td><span style="font-weight:600">${t.coursesCount}</span></td>
+                <td><span style="font-weight:600">${t.role === 'member' ? '—' : t.coursesCount}</span></td>
                 <td><span style="font-size:12.5px;color:var(--muted)">${t.lastActive ? formatRelative(t.lastActive) : '—'}</span></td>
                 <td style="text-align:right">
                   <button class="btn icon ghost" title="Действия" onclick="openTeamActions('${t.id}', event)"><svg width="16" height="16"><use href="#i-dots"/></svg></button>
@@ -2451,7 +2459,7 @@ function openInviteModal() {
           </div>
           <div class="fg">
             <label>Роль</label>
-            <div class="radio-row">
+            <div class="radio-row" style="grid-template-columns:repeat(3,1fr)">
               <div class="radio-card" data-val="admin" onclick="selInvRole(this)">
                 <div class="radio-card-title">Admin</div>
                 <div class="radio-card-desc">Курсы + биллинг + команда</div>
@@ -2460,11 +2468,15 @@ function openInviteModal() {
                 <div class="radio-card-title">Author</div>
                 <div class="radio-card-desc">Только создание курсов</div>
               </div>
+              <div class="radio-card" data-val="member" onclick="selInvRole(this)">
+                <div class="radio-card-title">Member</div>
+                <div class="radio-card-desc">Сотрудник, проходит курсы</div>
+              </div>
             </div>
           </div>
           <div style="background:var(--accent-lt);border-radius:8px;padding:12px 14px;font-size:12.5px;color:var(--accent);display:flex;gap:10px;margin-top:8px">
             <svg width="16" height="16" style="flex-shrink:0;margin-top:1px"><use href="#i-info"/></svg>
-            <span>Каждое место в команде учитывается по тарифу. У вас осталось ${state.billing.seatsLimit - state.billing.seatsUsed} ${pluralize(state.billing.seatsLimit - state.billing.seatsUsed,'место','места','мест')}.</span>
+            <span>Места по тарифу учитываются только для Owner / Admin / Author. Сотрудники (Member) не входят в лимит.</span>
           </div>
         </div>
         <div class="modal-foot">
