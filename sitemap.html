@@ -576,16 +576,16 @@ footer {
 
     <div class="summary-strip reveal">
       <div class="summary-cell">
-        <div class="summary-val"><em>16</em></div>
+        <div class="summary-val"><em>23</em></div>
         <div class="summary-lbl">Экранов в MVP</div>
       </div>
       <div class="summary-cell">
-        <div class="summary-val"><em>4</em></div>
+        <div class="summary-val"><em>5</em></div>
         <div class="summary-lbl">Функциональные зоны</div>
       </div>
       <div class="summary-cell">
-        <div class="summary-val"><em>9</em></div>
-        <div class="summary-lbl">FR-требований</div>
+        <div class="summary-val"><em>3</em></div>
+        <div class="summary-lbl">Роли в команде</div>
       </div>
       <div class="summary-cell">
         <div class="summary-val"><em>7</em></div>
@@ -930,10 +930,92 @@ footer {
       </div>
     </div>
 
-    <!-- ═══════════ ZONE 4 — SYSTEM STATES ═══════════ -->
+    <!-- ═══════════ ZONE 3B — ADMIN ═══════════ -->
     <div class="zone">
       <div class="zone-header">
-        <div class="zone-num system">04</div>
+        <div class="zone-num app">04</div>
+        <div>
+          <div class="zone-title">Администрирование Workspace</div>
+          <div class="zone-sub">Доступно только Owner/Admin · Author видит только курсы и библиотеку</div>
+        </div>
+      </div>
+
+      <div class="pages-grid cols-3" style="margin-bottom:20px">
+        <div class="page-card app">
+          <div class="page-id">L-01</div>
+          <div class="page-title">Библиотека курсов</div>
+          <span class="page-route">/library</span>
+          <div class="page-desc">Все курсы workspace в одном месте. Видна всем участникам, включая Author. Главное отличие от «Мои курсы» — колонка автора и фильтры.</div>
+          <ul class="page-feats">
+            <li>Таблица с автором, статусом, исходником</li>
+            <li>Фильтры по автору / статусу</li>
+            <li>Поиск по названию</li>
+            <li>Открытие → editor / экспорт</li>
+          </ul>
+        </div>
+
+        <div class="page-card app">
+          <div class="page-id">T-01</div>
+          <div class="page-title">Команда</div>
+          <span class="page-route">/team</span>
+          <div class="page-desc">Управление участниками workspace. Только для Owner/Admin. Лимит мест из тарифа.</div>
+          <ul class="page-feats">
+            <li>Таблица: аватар, email, роль, статус, курсов, активность</li>
+            <li>Приглашение по email (модалка)</li>
+            <li>3 роли: Owner · Admin · Author</li>
+            <li>Статусы: Active · Invited · Inactive</li>
+            <li>Изменение роли / деактивация</li>
+          </ul>
+        </div>
+
+        <div class="page-card app">
+          <div class="page-id">B-01</div>
+          <div class="page-title">Биллинг</div>
+          <span class="page-route">/billing</span>
+          <div class="page-desc">Текущий план, использование квот, способ оплаты, история счетов. Сравнение тарифов и переход.</div>
+          <ul class="page-feats">
+            <li>Карточка текущего плана с usage-баром</li>
+            <li>Кол-во курсов / мест по тарифу</li>
+            <li>Способ оплаты (карта)</li>
+            <li>История счетов с PDF-скачиванием</li>
+            <li>3 тарифа: Starter / Pro / Enterprise</li>
+          </ul>
+        </div>
+      </div>
+
+      <h4 style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--ink);margin:8px 0 14px;padding-left:4px">Workspace — 4 таба внутри одного экрана</h4>
+      <div class="pages-grid cols-4">
+        <div class="page-card app">
+          <div class="page-id">W-S1</div>
+          <div class="page-title">Организация</div>
+          <span class="page-route">/workspace · tab=org</span>
+          <div class="page-desc">Базовые настройки: название, домен, язык, часовой пояс. Удаление workspace.</div>
+        </div>
+        <div class="page-card app">
+          <div class="page-id">W-S2</div>
+          <div class="page-title">Брендирование</div>
+          <span class="page-route">/workspace · tab=brand</span>
+          <div class="page-desc">Цвет акцента, логотип, шрифт — всё это вшивается в SCORM-курсы при экспорте. С живым превью обложки.</div>
+        </div>
+        <div class="page-card app">
+          <div class="page-id">W-S3</div>
+          <div class="page-title">Интеграции</div>
+          <span class="page-route">/workspace · tab=integrations</span>
+          <div class="page-desc">LMS-системы (Moodle / iSpring / Эквио), SSO (Azure AD, Google Workspace), webhooks для Slack/Bitrix.</div>
+        </div>
+        <div class="page-card app">
+          <div class="page-id">W-S4</div>
+          <div class="page-title">Журнал действий</div>
+          <span class="page-route">/workspace · tab=audit</span>
+          <div class="page-desc">Аудит-лог всех событий: кто создал/удалил/экспортировал. Фильтры по пользователю и периоду. Экспорт в CSV.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ ZONE 5 — SYSTEM STATES ═══════════ -->
+    <div class="zone">
+      <div class="zone-header">
+        <div class="zone-num system">05</div>
         <div>
           <div class="zone-title">Системные состояния</div>
           <div class="zone-sub">Универсальные паттерны — встречаются на нескольких экранах</div>
@@ -997,7 +1079,7 @@ footer {
     <!-- ═══════════ ROLES & PERSONAS ═══════════ -->
     <div class="zone">
       <div class="zone-header">
-        <div class="zone-num app">05</div>
+        <div class="zone-num app">06</div>
         <div>
           <div class="zone-title">Роли пользователей в MVP</div>
           <div class="zone-sub">В MVP — одна активная роль · мульти-роли запланированы в v1.0</div>
@@ -1046,7 +1128,7 @@ footer {
     <!-- ═══════════ TECHNICAL MAP ═══════════ -->
     <div class="zone">
       <div class="zone-header">
-        <div class="zone-num system">06</div>
+        <div class="zone-num system">07</div>
         <div>
           <div class="zone-title">Что НЕ входит в MVP</div>
           <div class="zone-sub">Запланировано в roadmap · важно для понимания границ системы</div>
