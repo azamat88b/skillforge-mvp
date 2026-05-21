@@ -1781,7 +1781,6 @@ const SEED_BILLING = {
   seatsUsed: 6,
   period: 'Май 2026',
   nextPayment: '2026-06-15',
-  paymentMethod: { type: 'card', last4: '4242', brand: 'Visa' },
   invoices: [
     { id: 'inv-202605', period: 'Май 2026', amount: 450000, status: 'paid',    date: '2026-05-15' },
     { id: 'inv-202604', period: 'Апрель 2026', amount: 450000, status: 'paid', date: '2026-04-15' },
@@ -2564,20 +2563,6 @@ registerRoute('/billing', () => {
           <span><b style="color:var(--text)">${b.seatsUsed}</b> из ${b.seatsLimit}</span>
         </div>
         <div class="usage-bar"><div class="usage-bar-fill" style="width:${Math.round((b.seatsUsed/b.seatsLimit)*100)}%"></div></div>
-      </div>
-    </div>
-
-    <div class="plan-card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-        <h3 style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--ink)">Способ оплаты</h3>
-        <button class="btn ghost sm" onclick="alert('Демо: смена способа оплаты')">Изменить</button>
-      </div>
-      <div style="display:flex;align-items:center;gap:14px">
-        <div style="width:54px;height:36px;background:linear-gradient(135deg,#1A1F71,#2952B8);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:11px;letter-spacing:0.05em">VISA</div>
-        <div>
-          <div style="font-weight:600">${b.paymentMethod.brand} •••• ${b.paymentMethod.last4}</div>
-          <div style="font-size:12px;color:var(--muted)">Срок действия 04/28</div>
-        </div>
       </div>
     </div>
 
